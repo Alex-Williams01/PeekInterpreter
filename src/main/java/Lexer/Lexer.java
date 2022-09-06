@@ -1,6 +1,7 @@
 package main.java.Lexer;
 
 import main.java.File.CodeReader;
+import main.java.File.Line;
 import main.java.Token.Instruction;
 import main.java.Token.Token;
 import main.java.Token.TokenList;
@@ -14,50 +15,60 @@ public class Lexer {
     private static final Map<String, String> INSTRUCTION_SET = Instruction.getInstructionSet((ignored -> true));
     private static final List<Character> IGNORE = List.of(' ', '\t');
 
-    private String line;
-
-    private int lineNumber;
+    private Line line;
     private int charCount;
     private Character currentChar;
     private final CodeReader codeReader;
 
     public Lexer(String sourcePath) {
         codeReader = new CodeReader(sourcePath);
-        lineNumber = 0;
     }
 
     public TokenList nextLine() {
         line = codeReader.nextLine();
-        if (Objects.equals(line, END_OF_FILE)) {
+        if (Objects.equals(line.data(), END_OF_FILE)) {
             return null;
         }
         charCount = -1;
         advance();
-        var tokenList = new TokenList(++lineNumber);
-        tokeniseLine().forEach(tokenList::addToken);
-        return tokenList;
+        return tokeniseLine(line.lineNumber());
     }
 
-    private List<Token> tokeniseLine() {
-        List<Token> tokens = new ArrayList<>();
+    private TokenList tokeniseLine(int lineNumber) {
+        var tokenList = new TokenList(lineNumber);
         var currentToken = "";
         while (currentChar != null) {
             if (IGNORE.contains(currentChar)) {
-                tokens.add(tokenise(currentToken));
+                var token = tokenise(currentToken, INSTRUCTION_SET);
+                if (token != null) {
+                    tokenList.addToken(token);
+                }
                 currentToken="";
             }
-            else currentToken = currentToken.concat(currentChar.toString());
-            advance();
-            if (currentChar == null) {
-                tokens.add(tokenise(currentToken));
+            else {
+                var token = tokenise(currentChar.toString(),  Instruction.getOperators());
+                if (token != null) {
+                    if (!currentToken.equals("")) {
+                        tokenList.addToken(tokenise(currentToken, INSTRUCTION_SET));
+                    }
+                    tokenList.addToken(token);
+                    currentToken = "";
+                } else {
+                    currentToken = currentToken.concat(currentChar.toString());
+                }
             }
+            advance();
         }
-        tokens.add(new Token("EOL", Instruction.EOL));
-        return tokens;
+        var token = tokenise(currentToken,  INSTRUCTION_SET);
+        if (token != null) {
+            tokenList.addToken(token);
+        }
+        tokenList.addToken(new Token("EOL", Instruction.EOL));
+        return tokenList;
     }
 
-    private Token tokenise(String currentToken) {
-        for (var entry : INSTRUCTION_SET.entrySet()) {
+    private Token tokenise(String currentToken, Map<String, String> instructionSet) {
+        for (var entry : instructionSet.entrySet()) {
             var pattern = Pattern.compile(entry.getKey());
             if (pattern.matcher(currentToken).find()) {
                 return  new Token(currentToken, Instruction.valueOf(entry.getValue()));
@@ -67,7 +78,7 @@ public class Lexer {
     }
 
     private void advance() {
-        charCount++;
-        currentChar = charCount < line.length() ? line.charAt(charCount) : null;
+        currentChar = ++charCount < line.data().length() ?
+                line.data().charAt(charCount) : null;
     }
 }

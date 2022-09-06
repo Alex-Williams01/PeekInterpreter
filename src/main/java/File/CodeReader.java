@@ -27,10 +27,11 @@ public class CodeReader {
         return line.startsWith("//");
     }
 
-    public String nextLine() {
+    public Line nextLine() {
         if (lineNumber < source.size()) {
-            return source.get(lineNumber++);
+            lineNumber++;
+            return new Line(lineNumber, source.get(lineNumber-1));
         }
-        return END_OF_FILE;
+        return new Line(lineNumber, END_OF_FILE);
     }
 }

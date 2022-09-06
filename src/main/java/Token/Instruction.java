@@ -62,6 +62,12 @@ public enum Instruction {
                         LinkedHashMap::new));
     }
 
+    public static Map<String, String> getOperators() {
+        return getInstructionSet(instruction -> instruction.instructionType == OPERATOR_ADDITIVE
+        || instruction.instructionType == OPERATOR_MULTIPLICATIVE
+        || instruction.instructionType == OPERATOR);
+    }
+
     public static Map<String, String> getAdditiveOperators() {
         return getInstructionSet(instruction -> instruction.instructionType == OPERATOR_ADDITIVE);
     }

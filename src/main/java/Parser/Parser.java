@@ -34,8 +34,8 @@ public class Parser {
         TokenList line;
         while ((line = lexer.nextLine()) != null) {
             lineNumber = line.getLineNumber();
-            var AST = parseLine(line);
             System.out.println(line);
+            var AST = parseLine(line);
             System.out.println(AST);
             System.out.println(Interpreter.visit(AST));
         }
