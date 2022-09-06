@@ -20,11 +20,13 @@ public enum Instruction {
     ELSE("else", "^else$", CONDITIONAL),
     GREATER_EQUAL("greater equals", "^>=$", EQUALITY),
     INT("int", "^int$", DATA_TYPE),
-    STRING("string", "^string$", DATA_TYPE),
+    STRING("String", "^String$", DATA_TYPE),
     PRINT("print", "^print$", OTHER),
     LBRACE("left brace", "^\\{$", OTHER),
     RBRACE("right brace", "^\\}$", OTHER),
-    NUMBER("number", "^\\d+[.]*\\d*$", OTHER),
+    INT_LITERAL("int literal", "^\\d+$",  LITERAL),
+    DOUBLE_LITERAL("double literal", "^\\d+[.]*\\d*$", LITERAL),
+    STRING_LITERAL("String Literal", "^\".*\"$", LITERAL),
     IDENTIFIER("identifier", "^[A-Za-z_][a-zA-Z_0-9]*$", OTHER),
     EOL("End of Line", "EOF", OTHER);
 

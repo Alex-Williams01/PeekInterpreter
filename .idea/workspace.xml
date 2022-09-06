@@ -1,14 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="63d04510-ce56-4814-a3a3-a58845350b99" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/ASTNodes/UnaryOperatorNode.java" afterDir="false" />
+    <list default="true" id="63d04510-ce56-4814-a3a3-a58845350b99" name="Changes" comment="- Seperated Number into int and double&#10;- Added support for Strings">
+      <change afterPath="$PROJECT_DIR$/src/main/java/ASTNodes/Unary/IntegerNode.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/ASTNodes/Unary/StringNode.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/Wrapper/Double.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/Wrapper/Integer.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/Wrapper/Number.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/Wrapper/Object.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/Wrapper/String.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ASTNodes/KeywordNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ASTNodes/Unary/KeywordNode.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ASTNodes/NumberNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ASTNodes/Unary/DoubleNode.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ASTNodes/UnaryNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ASTNodes/Unary/UnaryNode.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ASTNodes/UnaryOperatorNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ASTNodes/Unary/UnaryOperatorNode.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/File/CodeReader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/File/CodeReader.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/Interpreter/Interpreter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Interpreter/Interpreter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Lexer/Lexer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Lexer/Lexer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Main.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/Parser/Parser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Parser/Parser.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Token/TokenList.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Token/TokenisedLine.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Token/Instruction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Token/Instruction.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Token/InstructionType.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Token/InstructionType.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/test.txt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/test.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -55,6 +66,8 @@
       <recent name="C:\Users\alexl\OneDrive\Desktop\Coding\MyFirstInterpreter\src\SourceCode" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="main.java.Wrapper" />
+      <recent name="main.java.ASTNodes.Unary" />
       <recent name="main.java.Intepreter" />
       <recent name="main.java.Token" />
       <recent name="main.java.Parser" />
@@ -103,7 +116,7 @@
       <updated>1662322267352</updated>
       <workItem from="1662322269706" duration="27646000" />
       <workItem from="1662386571457" duration="9623000" />
-      <workItem from="1662431847810" duration="12097000" />
+      <workItem from="1662431847810" duration="43320000" />
     </task>
     <task id="LOCAL-00001" summary="Added basic lexer, parser and interpreter">
       <created>1662427977151</created>
@@ -119,7 +132,14 @@
       <option name="project" value="LOCAL" />
       <updated>1662436473313</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Made Interpreter start Parser, added support for unary operators">
+      <created>1662475733851</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1662475733852</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -139,27 +159,7 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Added basic lexer, parser and interpreter" />
     <MESSAGE value="Refactored line number and added support for no spaces" />
-    <option name="LAST_COMMIT_MESSAGE" value="Refactored line number and added support for no spaces" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/Parser/Parser.java</url>
-          <line>93</line>
-          <option name="timeStamp" value="7" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/Parser/Parser.java</url>
-          <line>43</line>
-          <option name="timeStamp" value="8" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/Parser/Parser.java</url>
-          <line>59</line>
-          <option name="timeStamp" value="9" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
+    <MESSAGE value="Made Interpreter start Parser, added support for unary operators" />
+    <option name="LAST_COMMIT_MESSAGE" value="Made Interpreter start Parser, added support for unary operators" />
   </component>
 </project>

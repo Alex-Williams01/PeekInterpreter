@@ -1,9 +1,9 @@
 package main.java.Parser;
 
 import main.java.ASTNodes.*;
+import main.java.ASTNodes.Unary.*;
 import main.java.Exceptions.MissingTokenException;
 import main.java.Exceptions.UnexpectedTokenException;
-import main.java.Interpreter.Interpreter;
 import main.java.Lexer.Lexer;
 import main.java.Token.Instruction;
 import main.java.Token.Token;
@@ -19,7 +19,7 @@ public class Parser {
 
     private final Lexer lexer;
     private List<Token> tokens;
-    private int current = 0;
+    private int cursor = 0;
 
     private Token currentToken;
 
@@ -33,19 +33,19 @@ public class Parser {
         TokenisedLine line;
         List<Node> abstractSyntaxTree = new ArrayList<>();
         while ((line = lexer.nextLine()) != null) {
-            lineNumber = line.getLineNumber();
             System.out.println(line);
+            lineNumber = line.getLineNumber();
             abstractSyntaxTree.add(parseLine(line));
         }
         return abstractSyntaxTree.iterator();
     }
 
     private Node parseLine(TokenisedLine line) {
-        this.current = -1;
+        this.cursor = -1;
         this.tokens = line.getTokens();
         advance();
         var result = block();
-        if (currentToken.instruction() != Instruction.EOL) {
+        if (!isEOL()) {
             throw new UnexpectedTokenException("Unexpected token '%s',"
                     .formatted(currentToken.data()) + " Expected '+', '-', '/' or '*");
         }
@@ -57,11 +57,10 @@ public class Parser {
     }
 
     private Node statement() {
-        if (accept(Instruction.INT) || accept(Instruction.STRING))  {
-            var identifierToken = currentToken;
-            expect(Instruction.IDENTIFIER);
-            expect(Instruction.EQUAL);
-            return equality(identifierToken);
+        if (accept(Instruction.STRING)) {
+            return equality(currentToken);
+        } else if (accept(Instruction.INT) || accept(Instruction.STRING))  {
+            return equality(currentToken);
         } else {
             throw new UnexpectedTokenException("Syntax error, unexpected token '%s' on line %s%n"
                     .formatted(currentToken.data(), lineNumber));
@@ -69,6 +68,8 @@ public class Parser {
     }
 
     private BinaryOperatorNode equality(Token token) {
+        expect(Instruction.IDENTIFIER);
+        expect(Instruction.EQUAL);
         return new BinaryOperatorNode(new KeywordNode(token), Instruction.EQUAL, expression());
     }
 
@@ -93,12 +94,20 @@ public class Parser {
     private Node factor() {
         var tok = currentToken;
 
-        if (accept(Instruction.MINUS) || accept(Instruction.ADD)) {
+        if (accept(Instruction.STRING_LITERAL)) {
+            return new StringNode(tok);
+        } else if (accept(Instruction.DOUBLE_LITERAL)) {
+            return new DoubleNode(tok);
+        } else if (accept(Instruction.INT_LITERAL))  {
+            return new IntegerNode(tok);
+        } else if (accept(Instruction.MINUS) || accept(Instruction.ADD)) {
             var value = currentToken;
-            advance();
-            return new UnaryOperatorNode(tok.instruction(), Double.parseDouble(value.data()));
-        } if (accept(Instruction.NUMBER))  {
-            return new NumberNode(tok);
+            if (accept(Instruction.INT_LITERAL) || accept(Instruction.DOUBLE_LITERAL)) {
+                return new UnaryOperatorNode(tok.instruction(), Double.parseDouble(value.data()));
+            } else {
+                throw new UnexpectedTokenException("Unexpected token '%s',"
+                        .formatted(currentToken.data()) + " Expected Integer or Double");
+            }
         } else if (accept(Instruction.LPAREN)) {
             var node = expression();
             expect(Instruction.RPAREN);
@@ -127,10 +136,15 @@ public class Parser {
     }
 
     private Token advance() {
-        current += 1;
-        if (current < tokens.size()) {
-            currentToken = tokens.get(current);
-        }
-        return currentToken;
+        return hasMoreTokens() ?
+                currentToken = tokens.get(++cursor) : null;
+    }
+
+    private boolean hasMoreTokens() {
+        return cursor < tokens.size();
+    }
+
+    private boolean isEOL() {
+        return currentToken.instruction() == Instruction.EOL;
     }
 }

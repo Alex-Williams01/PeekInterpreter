@@ -1,4 +1,4 @@
-package main.java.ASTNodes;
+package main.java.ASTNodes.Unary;
 
 import main.java.Token.Token;
 

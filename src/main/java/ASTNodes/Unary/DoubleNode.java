@@ -1,20 +1,16 @@
-package main.java.ASTNodes;
+package main.java.ASTNodes.Unary;
 
 import main.java.Token.Token;
 
-public class NumberNode extends UnaryNode {
+public class DoubleNode extends UnaryNode {
     private double value;
 
-    public NumberNode(Token token) {
+    public DoubleNode(Token token) {
         this.value = Double.parseDouble(token.data());
     }
 
     public double getValue() {
         return value;
-    }
-
-    public void setValue(double value) {
-        this.value = value;
     }
 
     @Override

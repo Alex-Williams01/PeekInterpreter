@@ -28,10 +28,14 @@ public class CodeReader {
     }
 
     public Line nextLine() {
-        if (lineNumber < source.size()) {
-            lineNumber++;
-            return new Line(lineNumber, source.get(lineNumber-1));
+        if (isEOF()) {
+            return new Line(lineNumber, END_OF_FILE);
         }
-        return new Line(lineNumber, END_OF_FILE);
+        lineNumber++;
+        return new Line(lineNumber, source.get(lineNumber-1));
+    }
+
+    private boolean isEOF() {
+        return lineNumber >= source.size();
     }
 }
