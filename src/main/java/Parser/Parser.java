@@ -1,17 +1,16 @@
 package main.java.Parser;
 
-import main.java.ASTNodes.BinaryOperatorNode;
-import main.java.ASTNodes.KeywordNode;
-import main.java.ASTNodes.Node;
-import main.java.ASTNodes.NumberNode;
+import main.java.ASTNodes.*;
 import main.java.Exceptions.MissingTokenException;
 import main.java.Exceptions.UnexpectedTokenException;
 import main.java.Interpreter.Interpreter;
 import main.java.Lexer.Lexer;
 import main.java.Token.Instruction;
 import main.java.Token.Token;
-import main.java.Token.TokenList;
+import main.java.Token.TokenisedLine;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
@@ -30,18 +29,18 @@ public class Parser {
         this.lexer = lexer;
     }
 
-    public void start() {
-        TokenList line;
+    public Iterator<Node> parse() {
+        TokenisedLine line;
+        List<Node> abstractSyntaxTree = new ArrayList<>();
         while ((line = lexer.nextLine()) != null) {
             lineNumber = line.getLineNumber();
             System.out.println(line);
-            var AST = parseLine(line);
-            System.out.println(AST);
-            System.out.println(Interpreter.visit(AST));
+            abstractSyntaxTree.add(parseLine(line));
         }
+        return abstractSyntaxTree.iterator();
     }
 
-    private Node parseLine(TokenList line) {
+    private Node parseLine(TokenisedLine line) {
         this.current = -1;
         this.tokens = line.getTokens();
         advance();
@@ -94,7 +93,11 @@ public class Parser {
     private Node factor() {
         var tok = currentToken;
 
-        if (accept(Instruction.NUMBER))  {
+        if (accept(Instruction.MINUS) || accept(Instruction.ADD)) {
+            var value = currentToken;
+            advance();
+            return new UnaryOperatorNode(tok.instruction(), Double.parseDouble(value.data()));
+        } if (accept(Instruction.NUMBER))  {
             return new NumberNode(tok);
         } else if (accept(Instruction.LPAREN)) {
             var node = expression();

@@ -3,11 +3,11 @@ package main.java.Token;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TokenList {
+public class TokenisedLine {
     private final List<Token> tokens = new ArrayList<>();
     private final int lineNumber;
 
-    public TokenList(int lineNumber) {
+    public TokenisedLine(int lineNumber) {
         this.lineNumber = lineNumber;
     }
 

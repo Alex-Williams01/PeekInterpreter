@@ -4,7 +4,7 @@ import main.java.File.CodeReader;
 import main.java.File.Line;
 import main.java.Token.Instruction;
 import main.java.Token.Token;
-import main.java.Token.TokenList;
+import main.java.Token.TokenisedLine;
 
 import java.util.*;
 import java.util.regex.Pattern;
@@ -24,7 +24,7 @@ public class Lexer {
         codeReader = new CodeReader(sourcePath);
     }
 
-    public TokenList nextLine() {
+    public TokenisedLine nextLine() {
         line = codeReader.nextLine();
         if (Objects.equals(line.data(), END_OF_FILE)) {
             return null;
@@ -34,8 +34,8 @@ public class Lexer {
         return tokeniseLine(line.lineNumber());
     }
 
-    private TokenList tokeniseLine(int lineNumber) {
-        var tokenList = new TokenList(lineNumber);
+    private TokenisedLine tokeniseLine(int lineNumber) {
+        var tokenList = new TokenisedLine(lineNumber);
         var currentToken = "";
         while (currentChar != null) {
             if (IGNORE.contains(currentChar)) {
