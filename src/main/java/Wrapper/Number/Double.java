@@ -4,7 +4,7 @@ import java.lang.String;
 public class Double extends Number<Double, java.lang.Double> {
 
     public Double(double value) {
-        this.value = value;
+        super(value);
     }
 
     public Double add(Double other) {
@@ -25,10 +25,6 @@ public class Double extends Number<Double, java.lang.Double> {
     public Double multiplyBy(Double other) {
         value *= other.value;
         return this;
-    }
-
-    public java.lang.Double getValue() {
-        return value;
     }
 
     public String parseString() {

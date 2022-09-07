@@ -1,10 +1,9 @@
 package main.java.Wrapper;
 
-public class String extends Object {
-    private java.lang.String value;
+public class String extends Object<java.lang.String> {
 
     public String(java.lang.String value) {
-        this.value = value.substring(1, value.length()-1);;
+        super(value.substring(1, value.length()-1));
     }
 
     public String add(Object other) {

@@ -2,10 +2,10 @@ package main.java.ASTNodes.Unary;
 
 import main.java.Token.Token;
 
-public class KeywordNode extends UnaryNode {
+public class VariableAccessNode extends UnaryNode {
     private String value;
 
-    public KeywordNode(Token token) {
+    public VariableAccessNode(Token token) {
         this.value = token.data();
     }
 

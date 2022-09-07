@@ -2,11 +2,17 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="63d04510-ce56-4814-a3a3-a58845350b99" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/java/ASTNodes/VariableAssignmentNode.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/SymbolTable/SymbolTable.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ASTNodes/Unary/KeywordNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ASTNodes/Unary/VariableAccessNode.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/Interpreter/Interpreter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Interpreter/Interpreter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Wrapper/Double.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Wrapper/Number/Double.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Wrapper/Integer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Wrapper/Number/Integer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Wrapper/Number.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Wrapper/Number/Number.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Parser/Parser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Parser/Parser.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Wrapper/Number/Double.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Wrapper/Number/Double.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Wrapper/Number/Integer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Wrapper/Number/Integer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Wrapper/Number/Number.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Wrapper/Number/Number.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Wrapper/Object.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Wrapper/Object.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Wrapper/String.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Wrapper/String.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/test.txt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/test.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -103,7 +109,7 @@
       <updated>1662322267352</updated>
       <workItem from="1662322269706" duration="27646000" />
       <workItem from="1662386571457" duration="9623000" />
-      <workItem from="1662431847810" duration="48760000" />
+      <workItem from="1662431847810" duration="63798000" />
     </task>
     <task id="LOCAL-00001" summary="Added basic lexer, parser and interpreter">
       <created>1662427977151</created>
@@ -133,7 +139,14 @@
       <option name="project" value="LOCAL" />
       <updated>1662508498335</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="- fixed casting bug">
+      <created>1662514159217</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1662514159217</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -155,6 +168,7 @@
     <MESSAGE value="Refactored line number and added support for no spaces" />
     <MESSAGE value="Made Interpreter start Parser, added support for unary operators" />
     <MESSAGE value="- Seperated Number into int and double&#10;- Added support for Strings" />
-    <option name="LAST_COMMIT_MESSAGE" value="- Seperated Number into int and double&#10;- Added support for Strings" />
+    <MESSAGE value="- fixed casting bug" />
+    <option name="LAST_COMMIT_MESSAGE" value="- fixed casting bug" />
   </component>
 </project>

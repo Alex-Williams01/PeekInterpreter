@@ -3,7 +3,9 @@ package main.java.Interpreter;
 import main.java.ASTNodes.BinaryOperatorNode;
 import main.java.ASTNodes.Node;
 import main.java.ASTNodes.Unary.*;
+import main.java.ASTNodes.VariableAssignmentNode;
 import main.java.Parser.Parser;
+import main.java.SymbolTable.SymbolTable;
 import main.java.Token.Instruction;
 import main.java.Wrapper.Number.Double;
 import main.java.Wrapper.Number.Integer;
@@ -22,12 +24,13 @@ public class Interpreter {
     public void start() {
         var AST = parser.parse();
         while (AST.hasNext()) {
-            System.out.println(visit(AST.next()).parseString());
+            System.out.println(visit(AST.next()));
         }
     }
     public Object visit(Node node) {
         return switch(node) {
-            case KeywordNode keywordNode -> new Integer(1);
+            case VariableAssignmentNode variableAssignmentNode -> visitVariableAssignmentNode(variableAssignmentNode);
+            case VariableAccessNode variableAccessNode ->  SymbolTable.get(variableAccessNode.getValue());
             case StringNode stringNode -> new String(stringNode.getValue());
             case DoubleNode doubleNode -> new Double(doubleNode.getValue());
             case IntegerNode integerNode -> new Integer(integerNode.getValue());
@@ -43,6 +46,19 @@ public class Interpreter {
             case MINUS ->  new Double(-node.getValue());
             default -> null;
         };
+    }
+
+    private Object visitVariableAssignmentNode(VariableAssignmentNode variableAssignmentNode) {
+        var value = visit(variableAssignmentNode.getExpression());
+        var varClass = variableAssignmentNode.getDataType();
+        if (varClass.isInstance(value)) {
+            SymbolTable.add(variableAssignmentNode.getVariableName(), value);
+            return value;
+        }
+        //TODO REPLACE WITH CUSTOM EXCEPTION
+        throw new ClassCastException("cannot convert %s to %s".formatted(
+                value, varClass
+        ));
     }
 
     private Object visitBinaryOperator(BinaryOperatorNode operatorNode) {

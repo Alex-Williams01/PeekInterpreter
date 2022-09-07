@@ -8,6 +8,8 @@ import main.java.Lexer.Lexer;
 import main.java.Token.Instruction;
 import main.java.Token.Token;
 import main.java.Token.TokenisedLine;
+import main.java.Wrapper.Number.Integer;
+import java.lang.String;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -33,7 +35,6 @@ public class Parser {
         TokenisedLine line;
         List<Node> abstractSyntaxTree = new ArrayList<>();
         while ((line = lexer.nextLine()) != null) {
-            System.out.println(line);
             lineNumber = line.getLineNumber();
             abstractSyntaxTree.add(parseLine(line));
         }
@@ -57,20 +58,25 @@ public class Parser {
     }
 
     private Node statement() {
+        var dataType = currentToken;
         if (accept(Instruction.STRING)) {
-            return equality(currentToken);
+            return equality(dataType, currentToken);
         } else if (accept(Instruction.INT) || accept(Instruction.STRING))  {
-            return equality(currentToken);
+            return equality(dataType, currentToken);
         } else {
-            throw new UnexpectedTokenException("Syntax error, unexpected token '%s' on line %s%n"
-                    .formatted(currentToken.data(), lineNumber));
+            return expression();
         }
     }
 
-    private BinaryOperatorNode equality(Token token) {
+    private Node equality(Token dataTypeToken, Token token) {
+        var dataType = switch(dataTypeToken.instruction()) {
+            case STRING -> main.java.Wrapper.String.class;
+            case INT -> Integer.class;
+            default -> Object.class;
+        };
         expect(Instruction.IDENTIFIER);
         expect(Instruction.EQUAL);
-        return new BinaryOperatorNode(new KeywordNode(token), Instruction.EQUAL, expression());
+        return new VariableAssignmentNode(dataType, token, expression());
     }
 
     private Node expression() {
@@ -113,7 +119,7 @@ public class Parser {
             expect(Instruction.RPAREN);
             return node;
         } else if (accept(Instruction.IDENTIFIER)) {
-            return new KeywordNode(tok);
+            return new VariableAccessNode(tok);
         } else {
             throw new RuntimeException("Syntax error: expected literal or variable");
         }

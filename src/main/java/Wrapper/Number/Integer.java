@@ -4,7 +4,7 @@ import java.lang.String;
 public class Integer extends Number<Integer, java.lang.Integer> {
 
     public Integer(int value) {
-        this.value = value;
+        super(value);
     }
 
     public Integer add(Integer other) {
@@ -18,6 +18,10 @@ public class Integer extends Number<Integer, java.lang.Integer> {
     }
 
     public Integer divideBy(Integer other) {
+        if (other.value == 0) {
+            //TODO replace with custom class
+            throw new ArithmeticException("Divide by zero");
+        }
         value /= other.value;
         return this;
     }
@@ -25,10 +29,6 @@ public class Integer extends Number<Integer, java.lang.Integer> {
     public Integer multiplyBy(Integer other) {
         value *= other.value;
         return this;
-    }
-
-    public java.lang.Integer getValue() {
-        return value;
     }
 
     public String parseString() {

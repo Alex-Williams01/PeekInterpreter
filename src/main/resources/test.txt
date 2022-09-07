@@ -1,1 +1,3 @@
-int test = 10 + 10.2
+int test = 2 * 10 + 20
+String hello = "boo"
+hello+test
