@@ -5,9 +5,9 @@ import main.java.ASTNodes.Node;
 import main.java.ASTNodes.Unary.*;
 import main.java.Parser.Parser;
 import main.java.Token.Instruction;
-import main.java.Wrapper.Double;
-import main.java.Wrapper.Integer;
-import main.java.Wrapper.Number;
+import main.java.Wrapper.Number.Double;
+import main.java.Wrapper.Number.Integer;
+import main.java.Wrapper.Number.Number;
 import main.java.Wrapper.Object;
 import main.java.Wrapper.String;
 
@@ -51,8 +51,8 @@ public class Interpreter {
             return visit(operatorNode.getRightNode());
         }
         return switch(left) {
-            case Integer leftInteger -> visitNumberNode(leftInteger, operatorNode);
-            case Double leftDouble -> visitNumberNode(leftDouble, operatorNode);
+            case Integer leftInteger -> visitNumberNode(leftInteger, operatorNode, Integer.class);
+            case Double leftDouble -> visitNumberNode(leftDouble, operatorNode, Double.class);
             case String leftString -> visitStringNode(leftString, operatorNode);
             default -> throw new IllegalStateException("Unexpected value: " + left);
         };
@@ -67,13 +67,17 @@ public class Interpreter {
         }
     }
 
-    private <T extends Number<T>> Number<T> visitNumberNode(T left, BinaryOperatorNode binaryOperatorNode) {
-        Object rightUntyped =  visit(binaryOperatorNode.getRightNode());
+    private <T extends Number<T, U>, U> Number<T, U> visitNumberNode(T left,
+                                                                     BinaryOperatorNode binaryOperatorNode,
+                                                                     Class<T> clazz) {
+        var rightUntyped =  visit(binaryOperatorNode.getRightNode());
         T right;
         try {
-            right =(T) rightUntyped;
-        } catch (Exception e) {
-            throw new ClassCastException("Cannot convert %s to an Integer".formatted(rightUntyped));
+            //
+            right = clazz.cast(rightUntyped);
+        } catch (ClassCastException e) {
+            //TODO replace with BadOperandException
+            throw new ClassCastException("Cannot convert %s to %s".formatted(rightUntyped, left.getClass()));
         }
         return switch(binaryOperatorNode.getOperatorType()) {
             case ADD -> left.add(right);

@@ -1,8 +1,7 @@
-package main.java.Wrapper;
+package main.java.Wrapper.Number;
 import java.lang.String;
 
-public class Double extends Number<Double> {
-    private double value;
+public class Double extends Number<Double, java.lang.Double> {
 
     public Double(double value) {
         this.value = value;
@@ -28,11 +27,18 @@ public class Double extends Number<Double> {
         return this;
     }
 
-    public double getValue() {
+    public java.lang.Double getValue() {
         return value;
     }
 
     public String parseString() {
         return String.valueOf(value);
+    }
+
+    @Override
+    public String toString() {
+        return "Double{" +
+                "value=" + value +
+                '}';
     }
 }

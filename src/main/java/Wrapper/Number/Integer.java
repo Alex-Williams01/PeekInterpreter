@@ -1,8 +1,7 @@
-package main.java.Wrapper;
+package main.java.Wrapper.Number;
 import java.lang.String;
 
-public class Integer extends Number<Integer> {
-    private int value;
+public class Integer extends Number<Integer, java.lang.Integer> {
 
     public Integer(int value) {
         this.value = value;
@@ -28,7 +27,7 @@ public class Integer extends Number<Integer> {
         return this;
     }
 
-    public double getValue() {
+    public java.lang.Integer getValue() {
         return value;
     }
 
