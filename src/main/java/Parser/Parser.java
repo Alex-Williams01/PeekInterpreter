@@ -76,7 +76,7 @@ public class Parser {
         };
         expect(Instruction.IDENTIFIER);
         expect(Instruction.EQUAL);
-        return new VariableAssignmentNode(dataType, token, expression());
+        return new VariableAssignmentNode(dataType, token, statement());
     }
 
     private Node expression() {

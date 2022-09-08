@@ -1,3 +1,3 @@
-int test = 2 * 10 + 20
-String hello = "boo"
-hello+test
+int food = int test = 2.5 * 10.4
+test
+food

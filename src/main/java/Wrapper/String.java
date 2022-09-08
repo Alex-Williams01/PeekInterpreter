@@ -3,12 +3,13 @@ package main.java.Wrapper;
 public class String extends Object<java.lang.String> {
 
     public String(java.lang.String value) {
-        super(value.substring(1, value.length()-1));
+        super(value
+                .replaceAll("^\"", "")
+                .replaceAll("\"$", ""));
     }
 
     public String add(Object other) {
-        value += other.parseString();
-        return this;
+        return new String(value+other.parseString());
     }
 
     public java.lang.String parseString() {

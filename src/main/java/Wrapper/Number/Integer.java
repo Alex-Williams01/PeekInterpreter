@@ -8,13 +8,15 @@ public class Integer extends Number<Integer, java.lang.Integer> {
     }
 
     public Integer add(Integer other) {
-        value += other.value;
-        return this;
+        return new Integer(value + other.value);
     }
 
     public Integer minus(Integer other) {
-        value -= other.value;
-        return this;
+        return new Integer(value - other.value);
+    }
+
+    public Integer multiplyBy(Integer other) {
+        return new Integer(value * other.value);
     }
 
     public Integer divideBy(Integer other) {
@@ -22,13 +24,7 @@ public class Integer extends Number<Integer, java.lang.Integer> {
             //TODO replace with custom class
             throw new ArithmeticException("Divide by zero");
         }
-        value /= other.value;
-        return this;
-    }
-
-    public Integer multiplyBy(Integer other) {
-        value *= other.value;
-        return this;
+        return new Integer(value / other.value);
     }
 
     public String parseString() {

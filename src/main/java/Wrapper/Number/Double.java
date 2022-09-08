@@ -8,23 +8,19 @@ public class Double extends Number<Double, java.lang.Double> {
     }
 
     public Double add(Double other) {
-        value += other.value;
-        return this;
+        return new Double(value + other.value);
     }
 
     public Double minus(Double other) {
-        value -= other.value;
-        return this;
+        return new Double(value - other.value);
     }
 
     public Double divideBy(Double other) {
-        value /= other.value;
-        return this;
+        return new Double(value / other.value);
     }
 
     public Double multiplyBy(Double other) {
-        value *= other.value;
-        return this;
+        return new Double(value * other.value);
     }
 
     public String parseString() {
