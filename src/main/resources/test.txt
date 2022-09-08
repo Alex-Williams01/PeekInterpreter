@@ -1,2 +1,2 @@
-String HELLO_WORLD = "hello world"
-HELLO_WORLD
+int HELLO_WORLD = 5
+bool x = HELLO_WORLD < 6

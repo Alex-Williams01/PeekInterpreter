@@ -4,9 +4,11 @@ import main.java.ASTNodes.BinaryOperatorNode;
 import main.java.ASTNodes.Node;
 import main.java.ASTNodes.Unary.*;
 import main.java.ASTNodes.VariableAssignmentNode;
+import main.java.Exceptions.UnexpectedTokenException;
 import main.java.Parser.Parser;
 import main.java.SymbolTable.SymbolTable;
 import main.java.Token.Instruction;
+import main.java.Wrapper.Boolean;
 import main.java.Wrapper.Number.Double;
 import main.java.Wrapper.Number.Integer;
 import main.java.Wrapper.Number.Number;
@@ -35,7 +37,7 @@ public class Interpreter {
             case DoubleNode doubleNode -> new Double(doubleNode.getValue());
             case IntegerNode integerNode -> new Integer(integerNode.getValue());
             case UnaryOperatorNode unaryOperatorNode -> visitUnaryOperator(unaryOperatorNode);
-            case BinaryOperatorNode binaryOperatorNode -> visitBinaryOperator(binaryOperatorNode);
+            case BinaryOperatorNode binaryOperatorNode -> visitBinary(binaryOperatorNode);
             default -> null;
         };
     }
@@ -61,11 +63,39 @@ public class Interpreter {
         ));
     }
 
+    private Object visitBinary(BinaryOperatorNode operatorNode) {
+        var operator = operatorNode.getOperatorType().getInstructionType();
+        return switch (operator) {
+            case OPERATOR_ADDITIVE,
+                    OPERATOR_MULTIPLICATIVE -> visitBinaryOperator(operatorNode);
+            case OPERATOR_COMPARISON -> visitComparisonOperator(operatorNode);
+            default -> throw new RuntimeException("AHHH");
+        };
+    }
+
+    private Object visitComparisonOperator(BinaryOperatorNode operatorNode) {
+        var operator = operatorNode.getOperatorType();
+        var left = visit(operatorNode.getLeftNode());
+        var right = visit(operatorNode.getRightNode());
+        try {
+            return switch (operator) {
+                case NOT_EQUAL -> new Boolean(!left.getValue().equals(right.getValue()));
+                case EQUALS -> new Boolean(left.getValue().equals(right.getValue()));
+                case LESS_EQUAL -> ((Number)left).lessThanEqual((Number)right);
+                case GREATER_EQUAL -> ((Number)left).greaterThanEqual((Number)right);
+                case LESS_THAN -> ((Number)left).lessThan((Number)right);
+                case GREATER_THAN -> ((Number)left).greaterThan((Number)right);
+                default -> throw new RuntimeException("AHHH");
+            };
+        } catch (ClassCastException e) {
+            //TODO REPLACE WITH BAD OPERAND EXCEPTION
+            throw new RuntimeException("Bad Operand for comparison");
+        }
+
+    }
+
     private Object visitBinaryOperator(BinaryOperatorNode operatorNode) {
         var left = visit(operatorNode.getLeftNode());
-        if (operatorNode.getOperatorType().equals(Instruction.EQUAL)) {
-            return visit(operatorNode.getRightNode());
-        }
         return switch(left) {
             case Integer leftInteger -> visitNumberNode(leftInteger, operatorNode, Integer.class);
             case Double leftDouble -> visitNumberNode(leftDouble, operatorNode, Double.class);
@@ -74,12 +104,12 @@ public class Interpreter {
         };
     }
 
-    private String visitStringNode(String left, BinaryOperatorNode binaryOperatorNode) {
+    private Object visitStringNode(String left, BinaryOperatorNode binaryOperatorNode) {
         var rightUntyped = visit(binaryOperatorNode.getRightNode());
         if (binaryOperatorNode.getOperatorType().equals(Instruction.ADD)) {
             return left.add(rightUntyped);
         } else {
-            throw new ClassCastException("Cannot convert %s to a Double".formatted(rightUntyped));
+            throw new UnexpectedTokenException("Unknown operator %s".formatted(binaryOperatorNode));
         }
     }
 

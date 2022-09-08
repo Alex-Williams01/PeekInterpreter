@@ -59,12 +59,10 @@ public class Parser {
 
     private Node statement() {
         var dataType = currentToken;
-        if (accept(Instruction.STRING)) {
-            return equality(dataType, currentToken);
-        } else if (accept(Instruction.INT) || accept(Instruction.STRING))  {
+        if (accept(Instruction.INT) || accept(Instruction.STRING) || accept(Instruction.BOOLEAN))  {
             return equality(dataType, currentToken);
         } else {
-            return expression();
+            return comparison();
         }
     }
 
@@ -77,6 +75,10 @@ public class Parser {
         expect(Instruction.IDENTIFIER);
         expect(Instruction.EQUAL);
         return new VariableAssignmentNode(dataType, token, statement());
+    }
+
+    private Node comparison() {
+        return binaryOperator(this::expression, Instruction.getComparisonOperators());
     }
 
     private Node expression() {

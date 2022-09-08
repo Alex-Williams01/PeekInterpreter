@@ -1,4 +1,6 @@
 package main.java.Wrapper.Number;
+import main.java.Wrapper.Boolean;
+
 import java.lang.String;
 
 public class Double extends Number<Double, java.lang.Double> {
@@ -21,6 +23,26 @@ public class Double extends Number<Double, java.lang.Double> {
 
     public Double multiplyBy(Double other) {
         return new Double(value * other.value);
+    }
+
+    @Override
+    public Boolean lessThan(Double other) {
+        return new Boolean(value < other.value);
+    }
+
+    @Override
+    public Boolean lessThanEqual(Double other) {
+        return new Boolean(value <= other.value);
+    }
+
+    @Override
+    public Boolean greaterThan(Double other) {
+        return new Boolean(value > other.value);
+    }
+
+    @Override
+    public Boolean greaterThanEqual(Double other) {
+        return new Boolean(value >= other.value);
     }
 
     public String parseString() {

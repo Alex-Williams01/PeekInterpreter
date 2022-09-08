@@ -18,9 +18,15 @@ public enum Instruction {
     EQUAL("=", "^=$", OPERATOR),
     IF("if", "^if$", CONDITIONAL),
     ELSE("else", "^else$", CONDITIONAL),
-    GREATER_EQUAL("greater equals", "^>=$", EQUALITY),
+    GREATER_THAN(">", "^>$", OPERATOR_COMPARISON),
+    GREATER_EQUAL(">=", "^>=$", OPERATOR_COMPARISON),
+    LESS_THAN("<", "^<$", OPERATOR_COMPARISON),
+    LESS_EQUAL("<=", "^<=$", OPERATOR_COMPARISON),
+    NOT_EQUAL("!=", "^!=$", OPERATOR_COMPARISON),
+    EQUALS("==", "^==$", OPERATOR_COMPARISON),
     INT("int", "^int$", DATA_TYPE),
     STRING("String", "^String$", DATA_TYPE),
+    BOOLEAN("Boolean", "^bool$", DATA_TYPE),
     PRINT("print", "^print$", OTHER),
     LBRACE("left brace", "^\\{$", OTHER),
     RBRACE("right brace", "^\\}$", OTHER),
@@ -67,7 +73,8 @@ public enum Instruction {
     public static Map<String, String> getOperators() {
         return getInstructionSet(instruction -> instruction.instructionType == OPERATOR_ADDITIVE
         || instruction.instructionType == OPERATOR_MULTIPLICATIVE
-        || instruction.instructionType == OPERATOR);
+        || instruction.instructionType == OPERATOR
+        || instruction.instructionType == OPERATOR_COMPARISON);
     }
 
     public static Map<String, String> getAdditiveOperators() {
@@ -76,5 +83,9 @@ public enum Instruction {
 
     public static Map<String, String> getMultiplicativeOperators() {
         return getInstructionSet(instruction -> instruction.instructionType == OPERATOR_MULTIPLICATIVE);
+    }
+
+    public static Map<String, String> getComparisonOperators() {
+        return getInstructionSet(instruction -> instruction.instructionType == OPERATOR_COMPARISON);
     }
 }

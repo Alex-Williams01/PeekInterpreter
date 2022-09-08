@@ -51,13 +51,28 @@ public class Lexer {
             else {
                 var token = tokenise(currentChar.toString(),  Instruction.getOperators());
                 if (token != null) {
+                    //check if comparison operator
+                    token = getComparisonOperatorOrDefault(token);
+
+                    // if operator is directly after a token without a space
                     if (!currentToken.equals("")) {
                         tokenList.addToken(tokenise(currentToken, INSTRUCTION_SET));
                     }
                     tokenList.addToken(token);
                     currentToken = "";
                 } else {
-                    currentToken = currentToken.concat(currentChar.toString());
+                    if (isOperator(currentChar)) {
+                        token = getComparisonOperatorOrDefault(null);
+                    }
+                    if (token != null) {
+                        if (!currentToken.equals("")) {
+                            tokenList.addToken(tokenise(currentToken, INSTRUCTION_SET));
+                        }
+                        tokenList.addToken(token);
+                        currentToken = "";
+                    } else {
+                        currentToken = currentToken.concat(currentChar.toString());
+                    }
                 }
             }
             advance();
@@ -80,6 +95,17 @@ public class Lexer {
         return null;
     }
 
+    private Token getComparisonOperatorOrDefault(Token token) {
+        var nextChar = peek();
+        var potentialComparison = currentChar.toString().concat(nextChar.toString());
+        var comparisonToken = tokenise(potentialComparison, Instruction.getComparisonOperators());
+        if (comparisonToken != null) {
+            advance();
+            return comparisonToken;
+        }
+        return token;
+    }
+
     private Token tokeniseString() {
         var stringValue = "";
         advance();
@@ -92,5 +118,15 @@ public class Lexer {
     private void advance() {
         currentChar = ++charCount < line.data().length() ?
                 line.data().charAt(charCount) : null;
+    }
+
+    private Character peek() {
+        return charCount+1 < line.data().length() ?
+                line.data().charAt(charCount+1) : null;
+    }
+
+    private boolean isOperator(Character character) {
+        //TODO MAY BE ABLE TO CHANGE TO INSTRUCTION ENUM WHEN ADD ! UNARY OPERATOR
+        return List.of('!','>','<','=').contains(character);
     }
 }
