@@ -3,10 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="63d04510-ce56-4814-a3a3-a58845350b99" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Parser/Parser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Parser/Parser.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Wrapper/Number/Double.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Wrapper/Number/Double.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Wrapper/Number/Integer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Wrapper/Number/Integer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Wrapper/String.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Wrapper/String.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Lexer/Lexer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Lexer/Lexer.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/test.txt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/test.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -103,7 +100,7 @@
       <updated>1662322267352</updated>
       <workItem from="1662322269706" duration="27646000" />
       <workItem from="1662386571457" duration="9623000" />
-      <workItem from="1662431847810" duration="65772000" />
+      <workItem from="1662431847810" duration="67767000" />
     </task>
     <task id="LOCAL-00001" summary="Added basic lexer, parser and interpreter">
       <created>1662427977151</created>
@@ -147,7 +144,14 @@
       <option name="project" value="LOCAL" />
       <updated>1662592869724</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="- fixed variable bugs">
+      <created>1662595248281</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1662595248281</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -171,7 +175,8 @@
     <MESSAGE value="- Seperated Number into int and double&#10;- Added support for Strings" />
     <MESSAGE value="- fixed casting bug" />
     <MESSAGE value="- refactored class hierarchy&#10;- added support for variables" />
-    <option name="LAST_COMMIT_MESSAGE" value="- refactored class hierarchy&#10;- added support for variables" />
+    <MESSAGE value="- fixed variable bugs" />
+    <option name="LAST_COMMIT_MESSAGE" value="- fixed variable bugs" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

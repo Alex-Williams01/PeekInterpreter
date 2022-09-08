@@ -45,6 +45,9 @@ public class Lexer {
                 }
                 currentToken="";
             }
+            else if (currentChar.equals('"')) {
+                tokenList.addToken(tokeniseString());
+            }
             else {
                 var token = tokenise(currentChar.toString(),  Instruction.getOperators());
                 if (token != null) {
@@ -77,6 +80,15 @@ public class Lexer {
         return null;
     }
 
+    private Token tokeniseString() {
+        var stringValue = "";
+        advance();
+        while (currentChar != '"') {
+            stringValue = stringValue.concat(currentChar.toString());
+            advance();
+        }
+        return new Token(stringValue, Instruction.STRING_LITERAL);
+    }
     private void advance() {
         currentChar = ++charCount < line.data().length() ?
                 line.data().charAt(charCount) : null;

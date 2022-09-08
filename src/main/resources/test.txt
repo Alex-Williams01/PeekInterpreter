@@ -1,3 +1,2 @@
-int food = int test = 2.5 * 10.4
-test
-food
+String HELLO_WORLD = "hello world"
+HELLO_WORLD
