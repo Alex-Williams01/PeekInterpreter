@@ -1,6 +1,4 @@
-int ass = 6^10*2/4
 int test = -6 * 12 * 24
-bool testGreater = test > 6
-bool neg = testGreater and false
-bool hi = !(test>=6+7*8) or !neg
-neg
+bool testGreater = test > 6 ? false : true
+if (testGreater and false) { "HELLO WORLD" } else if (true) {"boo"} else {"ahhh"}
+int ass = 6^10*2/4

@@ -17,6 +17,8 @@ public enum Instruction {
     LPAREN("left parenthesis", "^\\($", OPERATOR),
     RPAREN("right parenthesis", "^\\)$", OPERATOR),
     EQUAL("=", "^=$", OPERATOR_ASSIGNMENT),
+    TERNARY_QUESTION("?", "^\\?$", CONDITIONAL),
+    TERNARY_COLON(":", "^:$", CONDITIONAL),
     IF("if", "^if$", CONDITIONAL),
     ELSE("else", "^else$", CONDITIONAL),
     GREATER_THAN(">", "^>$", OPERATOR_RELATIONAL),

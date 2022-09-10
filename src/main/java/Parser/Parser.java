@@ -55,20 +55,45 @@ public class Parser {
     }
 
     private Node block() {
+        if (accept(Instruction.LBRACE)) {
+            var codeBlock = statement();
+            expect(Instruction.RBRACE);
+            return codeBlock;
+        }
         return statement();
     }
 
     private Node statement() {
-        return expression();
-    }
-
-    private Node expression() {
         var dataType = currentToken;
         if (accept(Instruction.INT) || accept(Instruction.STRING) || accept(Instruction.BOOLEAN))  {
             return assignment(dataType, currentToken);
-        } else {
-            return binaryOperator(this::compExpression, Instruction.getLogicalOperators(), this::compExpression);
+        } else if (accept(Instruction.IF)) {
+            return branch();
         }
+        return expression();
+    }
+
+    private Node branch() {
+        expect(Instruction.LPAREN);
+        var booleanExpression = expression();
+        expect(Instruction.RPAREN);
+        var happyPath = block();
+        Node elsePath = new Node();
+        if (accept(Instruction.ELSE)) {
+            elsePath = block();
+        }
+        return new BranchingNode(booleanExpression, happyPath, elsePath);
+    }
+
+    private Node expression() {
+        Node compExpression = compExpression();
+        if (accept(Instruction.TERNARY_QUESTION)) {
+            Node happyPath = block();
+            expect(Instruction.TERNARY_COLON);
+            Node elsePath = block();
+            return new BranchingNode(compExpression, happyPath, elsePath);
+        }
+        return binaryOperator(() -> compExpression, Instruction.getLogicalOperators(), this::compExpression);
     }
 
     private Node assignment(Token dataTypeToken, Token token) {

@@ -1,6 +1,7 @@
 package main.java.Interpreter;
 
 import main.java.ASTNodes.BinaryOperatorNode;
+import main.java.ASTNodes.BranchingNode;
 import main.java.ASTNodes.Node;
 import main.java.ASTNodes.Unary.*;
 import main.java.ASTNodes.VariableAssignmentNode;
@@ -33,6 +34,7 @@ public class Interpreter {
         return switch(node) {
             case VariableAssignmentNode variableAssignmentNode -> visitVariableAssignmentNode(variableAssignmentNode);
             case VariableAccessNode variableAccessNode ->  SymbolTable.get(variableAccessNode.getValue());
+            case BranchingNode branchingNode -> visitBranchingNode(branchingNode);
             case StringNode stringNode -> visitUnaryNode(stringNode, 1);
             case DoubleNode doubleNode ->visitUnaryNode(doubleNode, 1);
             case IntegerNode integerNode -> visitUnaryNode(integerNode, 1);
@@ -41,6 +43,18 @@ public class Interpreter {
             case BinaryOperatorNode binaryOperatorNode -> visitBinary(binaryOperatorNode);
             default -> null;
         };
+    }
+
+    private Object visitBranchingNode(BranchingNode branchingNode) {
+        Object booleanExpression = visit(branchingNode.getBooleanExpression());
+        if (booleanExpression instanceof Boolean booleanExp) {
+            if (booleanExp.getValue()) {
+                return visit(branchingNode.getHappyPath());
+            } else {
+                return visit(branchingNode.getElsePath());
+            }
+        }
+        throw new RuntimeException("BAD BOOLEAN EXPRESSION IN IF STATEMENT");
     }
 
     private Object visitUnaryOperator(UnaryOperatorNode node) {

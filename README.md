@@ -4,12 +4,14 @@
 
 ## Grammar
 ````
-block: statement
+block: { statement }
+       | statement
 
-statement: expr
+statement: TYPE IDENITIFER EQ expr
+           | IF (expr) block ELSE block
 
-expr: TYPE IDENITIFER EQ expr
-      | comp-expr ((AND|OR) comp-expr)*
+expr: comp-expr ((AND|OR) comp-expr)*
+      | comp-expr ? block : block
             
     comp-expr: NOT comp-expr 
                | arith-expr (GT|LT|NE|EE|GTE|LTE) arith-expr
