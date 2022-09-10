@@ -6,6 +6,17 @@ public class Boolean extends Object<java.lang.Boolean> {
         super(value);
     }
 
+    public Boolean negate() {
+        return new Boolean(!value);
+    }
+
+    public Boolean and(Boolean other) {
+        return new Boolean(value && other.value);
+    }
+
+    public Boolean or(Boolean other) {
+        return new Boolean(value || other.value);
+    }
     @Override
     public String parseString() {
         return String.valueOf(value);

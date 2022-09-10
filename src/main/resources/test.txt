@@ -1,2 +1,5 @@
-int HELLO_WORLD = 5
-bool x = HELLO_WORLD < 6
+int test = 6 * 12 * 24
+bool testGreater = test > 6
+bool neg = testGreater and false
+bool hi = !(test>=6+7*8) or !neg
+neg

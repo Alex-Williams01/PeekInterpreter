@@ -97,6 +97,9 @@ public class Lexer {
 
     private Token getComparisonOperatorOrDefault(Token token) {
         var nextChar = peek();
+        if (peek() == null) {
+            return token;
+        }
         var potentialComparison = currentChar.toString().concat(nextChar.toString());
         var comparisonToken = tokenise(potentialComparison, Instruction.getComparisonOperators());
         if (comparisonToken != null) {

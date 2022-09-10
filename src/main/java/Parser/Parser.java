@@ -8,6 +8,7 @@ import main.java.Lexer.Lexer;
 import main.java.Token.Instruction;
 import main.java.Token.Token;
 import main.java.Token.TokenisedLine;
+import main.java.Wrapper.Boolean;
 import main.java.Wrapper.Number.Integer;
 import java.lang.String;
 
@@ -58,31 +59,39 @@ public class Parser {
     }
 
     private Node statement() {
+        return expression();
+    }
+
+    private Node expression() {
         var dataType = currentToken;
         if (accept(Instruction.INT) || accept(Instruction.STRING) || accept(Instruction.BOOLEAN))  {
-            return equality(dataType, currentToken);
+            return assignment(dataType, currentToken);
         } else {
-            return comparison();
+            return binaryOperator(this::compExpression, Instruction.getLogicalOperators());
         }
     }
 
-    private Node equality(Token dataTypeToken, Token token) {
+    private Node assignment(Token dataTypeToken, Token token) {
         var dataType = switch(dataTypeToken.instruction()) {
             case STRING -> main.java.Wrapper.String.class;
             case INT -> Integer.class;
+            case BOOLEAN -> Boolean.class;
             default -> Object.class;
         };
         expect(Instruction.IDENTIFIER);
         expect(Instruction.EQUAL);
-        return new VariableAssignmentNode(dataType, token, statement());
+        return new VariableAssignmentNode(dataType, token, expression());
     }
 
-    private Node comparison() {
-        return binaryOperator(this::expression, Instruction.getComparisonOperators());
+    private Node compExpression() {
+        if (accept(Instruction.NOT)) {
+            return new UnaryOperatorNode(Instruction.NOT, compExpression());
+        }
+        return binaryOperator(this::arithExpression, Instruction.getComparisonOperators());
     }
 
-    private Node expression() {
-        return binaryOperator(this::term,  Instruction.getAdditiveOperators());
+    private Node arithExpression() {
+        return binaryOperator(this::term, Instruction.getAdditiveOperators());
     }
     private Node term() {
         return binaryOperator(this::factor,  Instruction.getMultiplicativeOperators());
@@ -102,29 +111,34 @@ public class Parser {
     private Node factor() {
         var tok = currentToken;
 
-        if (accept(Instruction.STRING_LITERAL)) {
-            return new StringNode(tok);
-        } else if (accept(Instruction.DOUBLE_LITERAL)) {
-            return new DoubleNode(tok);
-        } else if (accept(Instruction.INT_LITERAL))  {
-            return new IntegerNode(tok);
-        } else if (accept(Instruction.MINUS) || accept(Instruction.ADD)) {
+        if (accept(Instruction.MINUS) || accept(Instruction.ADD)) {
             var value = currentToken;
             if (accept(Instruction.INT_LITERAL) || accept(Instruction.DOUBLE_LITERAL)) {
-                return new UnaryOperatorNode(tok.instruction(), Double.parseDouble(value.data()));
+                return new UnaryOperatorNode(tok.instruction(), atom(value));
             } else {
                 throw new UnexpectedTokenException("Unexpected token '%s',"
                         .formatted(currentToken.data()) + " Expected Integer or Double");
             }
-        } else if (accept(Instruction.LPAREN)) {
-            var node = expression();
-            expect(Instruction.RPAREN);
-            return node;
-        } else if (accept(Instruction.IDENTIFIER)) {
-            return new VariableAccessNode(tok);
         } else {
-            throw new RuntimeException("Syntax error: expected literal or variable");
+            return atom(currentToken);
         }
+    }
+
+    private Node atom(Token tok) {
+        advance();
+        return switch(tok.instruction()) {
+            case STRING_LITERAL -> new StringNode(tok);
+            case DOUBLE_LITERAL -> new DoubleNode(tok);
+            case INT_LITERAL -> new IntegerNode(tok);
+            case BOOLEAN_LITERAL -> new BooleanNode(tok);
+            case LPAREN -> {
+                var node = expression();
+                expect(Instruction.RPAREN);
+                yield node;
+            }
+            case IDENTIFIER -> new VariableAccessNode(tok);
+            default -> throw new RuntimeException("Syntax error: expected literal or variable");
+        };
     }
 
     private boolean expect(Instruction instruction) {

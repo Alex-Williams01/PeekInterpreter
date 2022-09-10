@@ -1,21 +1,22 @@
 package main.java.ASTNodes.Unary;
 
+import main.java.ASTNodes.Node;
 import main.java.Token.Instruction;
 
 public class UnaryOperatorNode extends UnaryNode {
     private final Instruction operator;
-    private final double value;
+    private final Node value;
 
-    public UnaryOperatorNode(Instruction operator, double value) {
+    public UnaryOperatorNode(Instruction operator, Node node) {
         this.operator = operator;
-        this.value = value;
+        this.value = node;
     }
 
     public Instruction getOperator() {
         return operator;
     }
 
-    public double getValue() {
+    public Node getValue() {
         return value;
     }
 }

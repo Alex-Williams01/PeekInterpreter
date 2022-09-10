@@ -33,20 +33,39 @@ public class Interpreter {
         return switch(node) {
             case VariableAssignmentNode variableAssignmentNode -> visitVariableAssignmentNode(variableAssignmentNode);
             case VariableAccessNode variableAccessNode ->  SymbolTable.get(variableAccessNode.getValue());
-            case StringNode stringNode -> new String(stringNode.getValue());
-            case DoubleNode doubleNode -> new Double(doubleNode.getValue());
-            case IntegerNode integerNode -> new Integer(integerNode.getValue());
+            case StringNode stringNode -> visitUnaryNode(stringNode, 1);
+            case DoubleNode doubleNode ->visitUnaryNode(doubleNode, 1);
+            case IntegerNode integerNode -> visitUnaryNode(integerNode, 1);
+            case BooleanNode booleanNode -> visitUnaryNode(booleanNode, 1);
             case UnaryOperatorNode unaryOperatorNode -> visitUnaryOperator(unaryOperatorNode);
             case BinaryOperatorNode binaryOperatorNode -> visitBinary(binaryOperatorNode);
             default -> null;
         };
     }
 
-    private Double visitUnaryOperator(UnaryOperatorNode node) {
+    private Object visitUnaryOperator(UnaryOperatorNode node) {
+        var value = node.getValue();
         return switch(node.getOperator()) {
-            case ADD ->  new Double(node.getValue());
-            case MINUS ->  new Double(-node.getValue());
+            case ADD ->  visitUnaryNode(value, 1);
+            case MINUS ->  visitUnaryNode(value, -1);
+            case NOT -> {
+                var compExpression = visit(value);
+                if (compExpression instanceof Boolean booleanExpression) {
+                    yield booleanExpression.negate();
+                }
+                throw new RuntimeException("BAD OPERAND");
+            }
             default -> null;
+        };
+    }
+
+    private Object visitUnaryNode(Node node, java.lang.Integer multiplier) {
+        return switch(node) {
+            case DoubleNode doubleNode -> new Double(multiplier*doubleNode.getValue());
+            case IntegerNode integerNode -> new Integer(multiplier*integerNode.getValue());
+            case BooleanNode booleanNode -> new Boolean(booleanNode.getValue());
+            case StringNode stringNode -> new String(stringNode.getValue());
+            default -> throw new IllegalStateException("Unexpected value: " + node);
         };
     }
 
@@ -69,8 +88,24 @@ public class Interpreter {
             case OPERATOR_ADDITIVE,
                     OPERATOR_MULTIPLICATIVE -> visitBinaryOperator(operatorNode);
             case OPERATOR_COMPARISON -> visitComparisonOperator(operatorNode);
+            case OPERATOR_LOGICAL -> visitLogicalOperator(operatorNode);
             default -> throw new RuntimeException("AHHH");
         };
+    }
+
+    private Object visitLogicalOperator(BinaryOperatorNode operatorNode) {
+        var operator = operatorNode.getOperatorType();
+        try {
+            Boolean left = (Boolean) visit(operatorNode.getLeftNode());
+            Boolean right = (Boolean) visit(operatorNode.getRightNode());
+            return switch(operator) {
+                case AND -> left.and(right);
+                case OR -> left.or(right);
+                default -> throw new IllegalStateException("Unexpected value: " + operator);
+            };
+        } catch (ClassCastException e) {
+            throw new RuntimeException("BAD CAST OPERAND BOOLEAN");
+        }
     }
 
     private Object visitComparisonOperator(BinaryOperatorNode operatorNode) {

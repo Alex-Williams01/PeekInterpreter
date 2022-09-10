@@ -24,6 +24,9 @@ public enum Instruction {
     LESS_EQUAL("<=", "^<=$", OPERATOR_COMPARISON),
     NOT_EQUAL("!=", "^!=$", OPERATOR_COMPARISON),
     EQUALS("==", "^==$", OPERATOR_COMPARISON),
+    NOT("Not Operator (!)","^!$", OPERATOR_LOGICAL),
+    AND("And", "^and$", OPERATOR_LOGICAL),
+    OR("And", "^or$", OPERATOR_LOGICAL),
     INT("int", "^int$", DATA_TYPE),
     STRING("String", "^String$", DATA_TYPE),
     BOOLEAN("Boolean", "^bool$", DATA_TYPE),
@@ -33,6 +36,7 @@ public enum Instruction {
     INT_LITERAL("int literal", "^\\d+$",  LITERAL),
     DOUBLE_LITERAL("double literal", "^\\d+[.]*\\d*$", LITERAL),
     STRING_LITERAL("String Literal", "^\".*\"$", LITERAL),
+    BOOLEAN_LITERAL("Boolean Literal", "^true|false$", LITERAL),
     IDENTIFIER("identifier", "^[A-Za-z_][a-zA-Z_0-9]*$", OTHER),
     EOL("End of Line", "EOF", OTHER);
 
@@ -71,10 +75,11 @@ public enum Instruction {
     }
 
     public static Map<String, String> getOperators() {
-        return getInstructionSet(instruction -> instruction.instructionType == OPERATOR_ADDITIVE
-        || instruction.instructionType == OPERATOR_MULTIPLICATIVE
-        || instruction.instructionType == OPERATOR
-        || instruction.instructionType == OPERATOR_COMPARISON);
+        return getInstructionSet(instruction -> instruction.instructionType.name().contains("OPERATOR"));
+    }
+
+    public static Map<String, String> getLogicalOperators() {
+        return getInstructionSet(instruction -> instruction.instructionType == OPERATOR_LOGICAL);
     }
 
     public static Map<String, String> getAdditiveOperators() {
