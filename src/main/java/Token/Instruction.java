@@ -19,6 +19,7 @@ public enum Instruction {
     DECREMENT("--", "^--$", OPERATOR_ADDITIVE),
     PRE_DECREMENT("Pre-decrement", "^--$",  OPERATOR_ADDITIVE),
     POST_DECREMENT("Post-decrement", "^--$", OPERATOR_ADDITIVE),
+    MODULUS("Modulus", "^%$", OPERATOR),
     POWER("power", "^\\^$", OPERATOR),
     LPAREN("left parenthesis", "^\\($", OPERATOR),
     RPAREN("right parenthesis", "^\\)$", OPERATOR),

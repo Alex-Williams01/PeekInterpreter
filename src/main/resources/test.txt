@@ -6,4 +6,4 @@ test++
 test
 --test
 test--
-test
+test%5^2

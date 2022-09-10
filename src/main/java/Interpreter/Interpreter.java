@@ -200,6 +200,7 @@ public class Interpreter {
             case MINUS -> left.minus(right);
             case DIVIDE -> left.divideBy(right);
             case TIMES -> left.multiplyBy(right);
+            case MODULUS -> left.modulus(right);
             default-> null;
         };
     }

@@ -12,6 +12,7 @@ public abstract class Number<T extends Number, U> extends Object<U> {
     public abstract T divideBy(T other);
     public abstract T multiplyBy(T other);
     public abstract T pow(T other);
+    public abstract T modulus(T other);
     public abstract T negated();
     public abstract T increment();
     public abstract T decrement();

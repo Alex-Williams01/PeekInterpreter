@@ -123,7 +123,11 @@ public class Parser {
     }
 
     private Node power() {
-        return binaryOperator(this::atom, Map.of(Instruction.POWER.name(), Instruction.POWER.getPatternMatcher()), this::factor);
+        return binaryOperator(this::modulus, Map.of(Instruction.POWER.name(), Instruction.POWER.getPatternMatcher()), this::factor);
+    }
+
+    private Node modulus() {
+        return binaryOperator(this::atom, Map.of(Instruction.MODULUS.name(), Instruction.MODULUS.getPatternMatcher()), this::factor);
     }
 
     private Node binaryOperator(Supplier<Node> function, Map<String, String> operatorTypes, Supplier<Node> secondaryFunction) {

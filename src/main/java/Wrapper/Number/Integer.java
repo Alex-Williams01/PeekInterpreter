@@ -24,6 +24,10 @@ public class Integer extends Number<Integer, java.lang.Integer> {
         return new Integer((int) Math.pow(value, other.value));
     }
 
+    public Integer modulus(Integer other) {
+        return new Integer(value % other.value);
+    }
+
     public Integer increment() {
         return new Integer(value + 1);
     }

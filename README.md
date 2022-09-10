@@ -23,7 +23,9 @@ term: factor ((MULT|DIV) factor)*
 
 factor: (PLUS|MINUS)* power
 
-power: atom (POW factor)*
+power: modulus (POW factor)*
+
+modulus: atom (MODULUS factor)*
         
 atom: INT | DOUBLE | STRING | IDENTIFIER
       | LPARN expr RPAREN
