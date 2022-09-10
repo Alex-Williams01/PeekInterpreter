@@ -52,7 +52,9 @@ public class Lexer {
                 var token = tokenise(currentChar.toString(),  Instruction.getOperators());
                 if (token != null) {
                     //check if comparison operator
-                    token = getComparisonOperatorOrDefault(token);
+                    if (isOperator(currentChar)) {
+                        token = getComparisonOperatorOrDefault(token);
+                    }
 
                     // if operator is directly after a token without a space
                     if (!currentToken.equals("")) {

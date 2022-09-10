@@ -9,6 +9,7 @@ block: { statement }
 
 statement: TYPE IDENITIFER EQ expr
            | IF (expr) block ELSE block
+           | expr
 
 expr: comp-expr ((AND|OR) comp-expr)*
       | comp-expr ? block : block
