@@ -4,7 +4,16 @@
     <list default="true" id="63d04510-ce56-4814-a3a3-a58845350b99" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ASTNodes/Unary/UnaryOperatorNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ASTNodes/Unary/UnaryOperatorNode.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ASTNodes/Unary/VariableAccessNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ASTNodes/Unary/VariableAccessNode.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Interpreter/Interpreter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Interpreter/Interpreter.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/Lexer/Lexer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Lexer/Lexer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Parser/Parser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Parser/Parser.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/SymbolTable/SymbolTable.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/SymbolTable/SymbolTable.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Token/Instruction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Token/Instruction.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Wrapper/Number/Double.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Wrapper/Number/Double.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Wrapper/Number/Integer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Wrapper/Number/Integer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Wrapper/Number/Number.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Wrapper/Number/Number.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/test.txt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/test.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -195,7 +204,14 @@
       <option name="project" value="LOCAL" />
       <updated>1662820714327</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="Cleanup">
+      <created>1662834289427</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1662834289427</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -251,35 +267,26 @@
     <MESSAGE value="Bug fixes and cleanup" />
     <MESSAGE value="Added power operator" />
     <MESSAGE value="Added conditional branching" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added conditional branching" />
+    <MESSAGE value="Cleanup" />
+    <option name="LAST_COMMIT_MESSAGE" value="Cleanup" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/Interpreter/Interpreter.java</url>
-          <line>85</line>
-          <option name="timeStamp" value="20" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/Interpreter/Interpreter.java</url>
-          <line>33</line>
-          <option name="timeStamp" value="36" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/Parser/Parser.java</url>
-          <line>50</line>
-          <option name="timeStamp" value="53" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/Parser/Parser.java</url>
-          <line>140</line>
-          <option name="timeStamp" value="54" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/Interpreter/Interpreter.java</url>
-          <line>98</line>
+          <line>119</line>
           <option name="timeStamp" value="55" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/Interpreter/Interpreter.java</url>
+          <line>72</line>
+          <option name="timeStamp" value="68" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/Parser/Parser.java</url>
+          <line>130</line>
+          <option name="timeStamp" value="69" />
         </line-breakpoint>
         <breakpoint enabled="true" type="java-exception">
           <properties class="java.lang.RuntimeException" package="java.lang" />

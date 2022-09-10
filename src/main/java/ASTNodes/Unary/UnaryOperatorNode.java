@@ -19,4 +19,12 @@ public class UnaryOperatorNode extends UnaryNode {
     public Node getValue() {
         return value;
     }
+
+    @Override
+    public String toString() {
+        return "UnaryOperatorNode{" +
+                "operator=" + operator +
+                ", value=" + value +
+                '}';
+    }
 }

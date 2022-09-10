@@ -19,7 +19,7 @@ public class VariableAccessNode extends UnaryNode {
 
     @Override
     public String toString() {
-        return "KeywordNode{" +
+        return "VariableAccessNode{" +
                 "value=" + value +
                 '}';
     }

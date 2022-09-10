@@ -8,7 +8,7 @@ import java.util.Map;
 public class SymbolTable {
     private static final Map<String,  Object> symbols = new HashMap<>();
 
-    public static void add(String name, Object obj) {
+    public static void set(String name, Object obj) {
         symbols.put(name, obj);
     }
 

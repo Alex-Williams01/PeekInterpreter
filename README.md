@@ -27,4 +27,5 @@ power: atom (POW factor)*
         
 atom: INT | DOUBLE | STRING | IDENTIFIER
       | LPARN expr RPAREN
+      | (INCR | DECR)* IDENTIFIER (INCR | DECR)*
 ````

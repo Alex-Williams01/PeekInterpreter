@@ -53,7 +53,7 @@ public class Lexer {
                 if (token != null) {
                     //check if comparison operator
                     if (isOperator(currentChar)) {
-                        token = getComparisonOperatorOrDefault(token);
+                        token = getOperatorOrDefault(token);
                     }
 
                     // if operator is directly after a token without a space
@@ -64,7 +64,7 @@ public class Lexer {
                     currentToken = "";
                 } else {
                     if (isOperator(currentChar)) {
-                        token = getComparisonOperatorOrDefault(null);
+                        token = getOperatorOrDefault(null);
                     }
                     if (token != null) {
                         if (!currentToken.equals("")) {
@@ -89,21 +89,21 @@ public class Lexer {
 
     private Token tokenise(String currentToken, Map<String, String> instructionSet) {
         for (var entry : instructionSet.entrySet()) {
-            var pattern = Pattern.compile(entry.getKey());
+            var pattern = Pattern.compile(entry.getValue());
             if (pattern.matcher(currentToken).find()) {
-                return  new Token(currentToken, Instruction.valueOf(entry.getValue()));
+                return  new Token(currentToken, Instruction.valueOf(entry.getKey()));
             }
         }
         return null;
     }
 
-    private Token getComparisonOperatorOrDefault(Token token) {
+    private Token getOperatorOrDefault(Token token) {
         var nextChar = peek();
         if (peek() == null) {
             return token;
         }
         var potentialComparison = currentChar.toString().concat(nextChar.toString());
-        var comparisonToken = tokenise(potentialComparison, Instruction.getComparisonOperators());
+        var comparisonToken = tokenise(potentialComparison, INSTRUCTION_SET);
         if (comparisonToken != null) {
             advance();
             return comparisonToken;
@@ -132,6 +132,6 @@ public class Lexer {
 
     private boolean isOperator(Character character) {
         //TODO MAY BE ABLE TO CHANGE TO INSTRUCTION ENUM WHEN ADD ! UNARY OPERATOR
-        return List.of('!','>','<','=').contains(character);
+        return List.of('!','>','<','=', '+', '-').contains(character);
     }
 }

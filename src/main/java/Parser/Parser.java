@@ -123,12 +123,12 @@ public class Parser {
     }
 
     private Node power() {
-        return binaryOperator(this::atom, Map.of(Instruction.POWER.getPatternMatcher(), Instruction.POWER.name()), this::factor);
+        return binaryOperator(this::atom, Map.of(Instruction.POWER.name(), Instruction.POWER.getPatternMatcher()), this::factor);
     }
 
     private Node binaryOperator(Supplier<Node> function, Map<String, String> operatorTypes, Supplier<Node> secondaryFunction) {
         Node left = function.get();
-        while (operatorTypes.containsKey(currentToken.instruction().getPatternMatcher())) {
+        while (operatorTypes.containsValue(currentToken.instruction().getPatternMatcher())) {
             var operatorToken = currentToken;
             advance();
             Node right = secondaryFunction.get();
@@ -167,7 +167,24 @@ public class Parser {
                 expect(Instruction.RPAREN);
                 yield node;
             }
-            case IDENTIFIER -> new VariableAccessNode(token);
+            case INCREMENT -> {
+                var val = new VariableAccessNode(currentToken);
+                expect(Instruction.IDENTIFIER);
+                yield new UnaryOperatorNode(Instruction.PRE_INCREMENT, val);
+            }
+            case DECREMENT -> {
+                var val = new VariableAccessNode(currentToken);
+                expect(Instruction.IDENTIFIER);
+                yield new UnaryOperatorNode(Instruction.PRE_DECREMENT, val);
+            }
+            case IDENTIFIER -> {
+                if(accept(Instruction.INCREMENT)) {
+                    yield new UnaryOperatorNode(Instruction.POST_INCREMENT, new VariableAccessNode(token));
+                } else if (accept(Instruction.DECREMENT)) {
+                    yield new UnaryOperatorNode(Instruction.POST_DECREMENT, new VariableAccessNode(token));
+                }
+                yield new VariableAccessNode(token);
+            }
             default -> throw new RuntimeException("Syntax error: expected literal or variable");
         };
     }

@@ -13,6 +13,12 @@ public enum Instruction {
     DIVIDE("divide", "^/$", OPERATOR_MULTIPLICATIVE),
     ADD("add", "^\\+$", OPERATOR_ADDITIVE),
     MINUS("minus", "^-$", OPERATOR_ADDITIVE),
+    INCREMENT("++", "^\\+\\+$", OPERATOR_ADDITIVE),
+    PRE_INCREMENT("Pre-increment", "^\\+\\+$",  OPERATOR_ADDITIVE),
+    POST_INCREMENT("Post-increment", "^\\+\\+$", OPERATOR_ADDITIVE),
+    DECREMENT("--", "^--$", OPERATOR_ADDITIVE),
+    PRE_DECREMENT("Pre-decrement", "^--$",  OPERATOR_ADDITIVE),
+    POST_DECREMENT("Post-decrement", "^--$", OPERATOR_ADDITIVE),
     POWER("power", "^\\^$", OPERATOR),
     LPAREN("left parenthesis", "^\\($", OPERATOR),
     RPAREN("right parenthesis", "^\\)$", OPERATOR),
@@ -69,8 +75,8 @@ public enum Instruction {
         return Arrays.stream(Instruction.values())
                 .filter(predicate)
                 .collect(Collectors.toMap(
-                        Instruction::getPatternMatcher,
                         Instruction::name,
+                        Instruction::getPatternMatcher,
                         (u, v) -> {
                             throw new IllegalStateException(String.format("Duplicate key %s", u));
                         },

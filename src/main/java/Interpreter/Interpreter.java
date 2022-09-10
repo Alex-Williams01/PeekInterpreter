@@ -27,7 +27,8 @@ public class Interpreter {
     public void start() {
         var AST = parser.parse();
         while (AST.hasNext()) {
-            System.out.println(visit(AST.next()));
+            var x = AST.next();
+            System.out.println(visit(x));
         }
     }
     public Object visit(Node node) {
@@ -68,6 +69,26 @@ public class Interpreter {
                 }
                 throw new RuntimeException("BAD OPERAND");
             }
+            case PRE_INCREMENT -> {
+                var newValue = ((Number)value).increment();
+                SymbolTable.set(((VariableAccessNode)node.getValue()).getValue(), newValue);
+                yield newValue;
+            }
+            case POST_INCREMENT -> {
+                var newValue = ((Number)value).increment();
+                SymbolTable.set(((VariableAccessNode)node.getValue()).getValue(), newValue);
+                yield value;
+            }
+            case PRE_DECREMENT -> {
+                var newValue = ((Number)value).decrement();
+                SymbolTable.set(((VariableAccessNode)node.getValue()).getValue(), newValue);
+                yield newValue;
+            }
+            case POST_DECREMENT -> {
+                var newValue = ((Number)value).decrement();
+                SymbolTable.set(((VariableAccessNode)node.getValue()).getValue(), newValue);
+                yield value;
+            }
             default -> null;
         };
     }
@@ -86,7 +107,7 @@ public class Interpreter {
         var value = visit(variableAssignmentNode.getExpression());
         var varClass = variableAssignmentNode.getDataType();
         if (varClass.isInstance(value)) {
-            SymbolTable.add(variableAssignmentNode.getVariableName(), value);
+            SymbolTable.set(variableAssignmentNode.getVariableName(), value);
             return value;
         }
         //TODO REPLACE WITH CUSTOM EXCEPTION

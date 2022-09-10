@@ -33,6 +33,15 @@ public class Double extends Number<Double, java.lang.Double> {
         return new Double(value * -1);
     }
 
+    public Double increment() {
+        return new Double(value + 1);
+    }
+
+    public Double decrement() {
+        return new Double(value - 1);
+    }
+
+
     @Override
     public Boolean lessThan(Double other) {
         return new Boolean(value < other.value);
