@@ -25,6 +25,10 @@ public class Double extends Number<Double, java.lang.Double> {
         return new Double(value * other.value);
     }
 
+    public Double negated() {
+        return new Double(value * -1);
+    }
+
     @Override
     public Boolean lessThan(Double other) {
         return new Boolean(value < other.value);

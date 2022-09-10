@@ -44,13 +44,12 @@ public class Interpreter {
     }
 
     private Object visitUnaryOperator(UnaryOperatorNode node) {
-        var value = node.getValue();
+        var value = visit(node.getValue());
         return switch(node.getOperator()) {
-            case ADD ->  visitUnaryNode(value, 1);
-            case MINUS ->  visitUnaryNode(value, -1);
+            case ADD ->  value;
+            case MINUS ->  ((Number)value).negated();
             case NOT -> {
-                var compExpression = visit(value);
-                if (compExpression instanceof Boolean booleanExpression) {
+                if (value instanceof Boolean booleanExpression) {
                     yield booleanExpression.negate();
                 }
                 throw new RuntimeException("BAD OPERAND");
@@ -87,7 +86,7 @@ public class Interpreter {
         return switch (operator) {
             case OPERATOR_ADDITIVE,
                     OPERATOR_MULTIPLICATIVE -> visitBinaryOperator(operatorNode);
-            case OPERATOR_COMPARISON -> visitComparisonOperator(operatorNode);
+            case OPERATOR_RELATIONAL -> visitComparisonOperator(operatorNode);
             case OPERATOR_LOGICAL -> visitLogicalOperator(operatorNode);
             default -> throw new RuntimeException("AHHH");
         };

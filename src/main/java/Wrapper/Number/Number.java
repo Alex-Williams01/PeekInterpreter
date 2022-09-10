@@ -3,7 +3,7 @@ package main.java.Wrapper.Number;
 import main.java.Wrapper.Boolean;
 import main.java.Wrapper.Object;
 
-public abstract class Number<T, U> extends Object<U> {
+public abstract class Number<T extends Number, U> extends Object<U> {
     public Number(U value) {
         super(value);
     }
@@ -11,6 +11,7 @@ public abstract class Number<T, U> extends Object<U> {
     public abstract T minus(T other);
     public abstract T divideBy(T other);
     public abstract T multiplyBy(T other);
+    public abstract T negated();
 
     public abstract Boolean lessThan(T other);
     public abstract Boolean lessThanEqual(T other);

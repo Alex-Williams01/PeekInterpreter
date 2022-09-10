@@ -21,6 +21,10 @@ public class Integer extends Number<Integer, java.lang.Integer> {
         return new Integer(value * other.value);
     }
 
+    public Integer negated() {
+        return new Integer(value * -1);
+    }
+
     @Override
     public Boolean lessThan(Integer other) {
         return new Boolean(value < other.value);

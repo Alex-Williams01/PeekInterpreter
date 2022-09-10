@@ -15,15 +15,15 @@ public enum Instruction {
     MINUS("minus", "^-$", OPERATOR_ADDITIVE),
     LPAREN("left parenthesis", "^\\($", OPERATOR),
     RPAREN("right parenthesis", "^\\)$", OPERATOR),
-    EQUAL("=", "^=$", OPERATOR),
+    EQUAL("=", "^=$", OPERATOR_ASSIGNMENT),
     IF("if", "^if$", CONDITIONAL),
     ELSE("else", "^else$", CONDITIONAL),
-    GREATER_THAN(">", "^>$", OPERATOR_COMPARISON),
-    GREATER_EQUAL(">=", "^>=$", OPERATOR_COMPARISON),
-    LESS_THAN("<", "^<$", OPERATOR_COMPARISON),
-    LESS_EQUAL("<=", "^<=$", OPERATOR_COMPARISON),
-    NOT_EQUAL("!=", "^!=$", OPERATOR_COMPARISON),
-    EQUALS("==", "^==$", OPERATOR_COMPARISON),
+    GREATER_THAN(">", "^>$", OPERATOR_RELATIONAL),
+    GREATER_EQUAL(">=", "^>=$", OPERATOR_RELATIONAL),
+    LESS_THAN("<", "^<$", OPERATOR_RELATIONAL),
+    LESS_EQUAL("<=", "^<=$", OPERATOR_RELATIONAL),
+    NOT_EQUAL("!=", "^!=$", OPERATOR_RELATIONAL),
+    EQUALS("==", "^==$", OPERATOR_RELATIONAL),
     NOT("Not Operator (!)","^!$", OPERATOR_LOGICAL),
     AND("And", "^and$", OPERATOR_LOGICAL),
     OR("And", "^or$", OPERATOR_LOGICAL),
@@ -91,6 +91,6 @@ public enum Instruction {
     }
 
     public static Map<String, String> getComparisonOperators() {
-        return getInstructionSet(instruction -> instruction.instructionType == OPERATOR_COMPARISON);
+        return getInstructionSet(instruction -> instruction.instructionType == OPERATOR_RELATIONAL);
     }
 }

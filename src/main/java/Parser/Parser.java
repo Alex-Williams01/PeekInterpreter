@@ -120,12 +120,12 @@ public class Parser {
                         .formatted(currentToken.data()) + " Expected Integer or Double");
             }
         } else {
-            return atom(currentToken);
+            advance();
+            return atom(tok);
         }
     }
 
     private Node atom(Token tok) {
-        advance();
         return switch(tok.instruction()) {
             case STRING_LITERAL -> new StringNode(tok);
             case DOUBLE_LITERAL -> new DoubleNode(tok);
