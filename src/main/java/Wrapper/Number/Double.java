@@ -25,6 +25,10 @@ public class Double extends Number<Double, java.lang.Double> {
         return new Double(value * other.value);
     }
 
+    public Double pow(Double other) {
+        return new Double(Math.pow(value, other.value));
+    }
+
     public Double negated() {
         return new Double(value * -1);
     }

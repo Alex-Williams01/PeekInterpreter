@@ -67,7 +67,7 @@ public class Parser {
         if (accept(Instruction.INT) || accept(Instruction.STRING) || accept(Instruction.BOOLEAN))  {
             return assignment(dataType, currentToken);
         } else {
-            return binaryOperator(this::compExpression, Instruction.getLogicalOperators());
+            return binaryOperator(this::compExpression, Instruction.getLogicalOperators(), this::compExpression);
         }
     }
 
@@ -87,22 +87,26 @@ public class Parser {
         if (accept(Instruction.NOT)) {
             return new UnaryOperatorNode(Instruction.NOT, compExpression());
         }
-        return binaryOperator(this::arithExpression, Instruction.getComparisonOperators());
+        return binaryOperator(this::arithExpression, Instruction.getComparisonOperators(), this::arithExpression);
     }
 
     private Node arithExpression() {
-        return binaryOperator(this::term, Instruction.getAdditiveOperators());
+        return binaryOperator(this::term, Instruction.getAdditiveOperators(), this::term);
     }
     private Node term() {
-        return binaryOperator(this::factor,  Instruction.getMultiplicativeOperators());
+        return binaryOperator(this::factor,  Instruction.getMultiplicativeOperators(), this::factor);
     }
 
-    private Node binaryOperator(Supplier<Node> function, Map<String, String> operatorTypes) {
+    private Node power() {
+        return binaryOperator(this::atom, Map.of(Instruction.POWER.getPatternMatcher(), Instruction.POWER.name()), this::factor);
+    }
+
+    private Node binaryOperator(Supplier<Node> function, Map<String, String> operatorTypes, Supplier<Node> secondaryFunction) {
         Node left = function.get();
         while (operatorTypes.containsKey(currentToken.instruction().getPatternMatcher())) {
             var operatorToken = currentToken;
             advance();
-            Node right = function.get();
+            Node right = secondaryFunction.get();
             left = new BinaryOperatorNode(left, operatorToken.instruction(), right);
         }
         return left;
@@ -112,31 +116,33 @@ public class Parser {
         var tok = currentToken;
 
         if (accept(Instruction.MINUS) || accept(Instruction.ADD)) {
-            var value = currentToken;
+            var value = power();
+            retreat();
             if (accept(Instruction.INT_LITERAL) || accept(Instruction.DOUBLE_LITERAL)) {
-                return new UnaryOperatorNode(tok.instruction(), atom(value));
+                return new UnaryOperatorNode(tok.instruction(), value);
             } else {
                 throw new UnexpectedTokenException("Unexpected token '%s',"
                         .formatted(currentToken.data()) + " Expected Integer or Double");
             }
         } else {
-            advance();
-            return atom(tok);
+            return power();
         }
     }
 
-    private Node atom(Token tok) {
-        return switch(tok.instruction()) {
-            case STRING_LITERAL -> new StringNode(tok);
-            case DOUBLE_LITERAL -> new DoubleNode(tok);
-            case INT_LITERAL -> new IntegerNode(tok);
-            case BOOLEAN_LITERAL -> new BooleanNode(tok);
+    private Node atom() {
+        var token = currentToken;
+        advance();
+        return switch(token.instruction()) {
+            case STRING_LITERAL -> new StringNode(token);
+            case DOUBLE_LITERAL -> new DoubleNode(token);
+            case INT_LITERAL -> new IntegerNode(token);
+            case BOOLEAN_LITERAL -> new BooleanNode(token);
             case LPAREN -> {
                 var node = expression();
                 expect(Instruction.RPAREN);
                 yield node;
             }
-            case IDENTIFIER -> new VariableAccessNode(tok);
+            case IDENTIFIER -> new VariableAccessNode(token);
             default -> throw new RuntimeException("Syntax error: expected literal or variable");
         };
     }
@@ -162,8 +168,13 @@ public class Parser {
                 currentToken = tokens.get(++cursor) : null;
     }
 
+    private Token retreat() {
+        return cursor > 0 ?
+                currentToken = tokens.get(--cursor) : null;
+    }
+
     private boolean hasMoreTokens() {
-        return cursor < tokens.size();
+        return cursor < tokens.size()-1;
     }
 
     private boolean isEOL() {

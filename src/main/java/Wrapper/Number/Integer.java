@@ -20,6 +20,9 @@ public class Integer extends Number<Integer, java.lang.Integer> {
     public Integer multiplyBy(Integer other) {
         return new Integer(value * other.value);
     }
+    public Integer pow(Integer other) {
+        return new Integer((int) Math.pow(value, other.value));
+    }
 
     public Integer negated() {
         return new Integer(value * -1);

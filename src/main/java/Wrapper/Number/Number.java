@@ -11,6 +11,7 @@ public abstract class Number<T extends Number, U> extends Object<U> {
     public abstract T minus(T other);
     public abstract T divideBy(T other);
     public abstract T multiplyBy(T other);
+    public abstract T pow(T other);
     public abstract T negated();
 
     public abstract Boolean lessThan(T other);

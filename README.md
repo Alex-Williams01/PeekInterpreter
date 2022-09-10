@@ -16,10 +16,11 @@ expr: TYPE IDENITIFER EQ expr
 
     arith-expr: term ((ADD|MIN) term)*
 
-term: factor (MULT|DIV) factor
+term: factor ((MULT|DIV) factor)*
 
-factor: (PLUS|MINUS) factor
-        | atom
+factor: (PLUS|MINUS)* power
+
+power: atom (POW factor)*
         
 atom: INT | DOUBLE | STRING | IDENTIFIER
       | LPARN expr RPAREN

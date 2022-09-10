@@ -85,7 +85,7 @@ public class Interpreter {
         var operator = operatorNode.getOperatorType().getInstructionType();
         return switch (operator) {
             case OPERATOR_ADDITIVE,
-                    OPERATOR_MULTIPLICATIVE -> visitBinaryOperator(operatorNode);
+                    OPERATOR_MULTIPLICATIVE, OPERATOR -> visitBinaryOperator(operatorNode);
             case OPERATOR_RELATIONAL -> visitComparisonOperator(operatorNode);
             case OPERATOR_LOGICAL -> visitLogicalOperator(operatorNode);
             default -> throw new RuntimeException("AHHH");
@@ -160,6 +160,7 @@ public class Interpreter {
             throw new ClassCastException("Cannot convert %s to %s".formatted(rightUntyped, left.getClass()));
         }
         return switch(binaryOperatorNode.getOperatorType()) {
+            case POWER -> left.pow(right);
             case ADD -> left.add(right);
             case MINUS -> left.minus(right);
             case DIVIDE -> left.divideBy(right);
