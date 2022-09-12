@@ -1,9 +1,13 @@
 int test = (-6)^2 * 3
 bool testGreater = !(test < 6) ? false : true
 if (testGreater and false) { "HELLO WORLD" } else if (true) {"boo"} else {"ahhh"}
+test = 2
 ++test
 test++
 test
 --test
 test--
-test%5^2
+test+=2
+test-=2
+test*=5
+test/=2

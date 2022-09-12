@@ -5,6 +5,7 @@ import main.java.ASTNodes.Unary.*;
 import main.java.Exceptions.MissingTokenException;
 import main.java.Exceptions.UnexpectedTokenException;
 import main.java.Lexer.Lexer;
+import main.java.SymbolTable.SymbolTable;
 import main.java.Token.Instruction;
 import main.java.Token.Token;
 import main.java.Token.TokenisedLine;
@@ -64,11 +65,35 @@ public class Parser {
     }
 
     private Node statement() {
-        var dataType = currentToken;
+        var firstToken = currentToken;
         if (accept(Instruction.INT) || accept(Instruction.STRING) || accept(Instruction.BOOLEAN))  {
-            return assignment(dataType, currentToken);
+            return assignment(firstToken, currentToken);
         } else if (accept(Instruction.IF)) {
             return branch();
+        }
+        if (accept(Instruction.IDENTIFIER)) {
+            Instruction instruction;
+            Node value;
+            if (accept(Instruction.EQUAL)) {
+                value = expression();
+            } else if (accept(Instruction.PLUS_EQUAL)) {
+                instruction = Instruction.PLUS;
+                value = new BinaryOperatorNode(new VariableAccessNode(firstToken), instruction, expression());
+            } else if (accept(Instruction.MINUS_EQUAL)) {
+                instruction = Instruction.MINUS;
+                value = new BinaryOperatorNode(new VariableAccessNode(firstToken), instruction, expression());
+            } else if (accept(Instruction.DIVIDE_EQUAL)) {
+                instruction = Instruction.DIVIDE;
+                value = new BinaryOperatorNode(new VariableAccessNode(firstToken), instruction, expression());
+            } else if (accept(Instruction.TIMES_EQUAL)) {
+                instruction = Instruction.TIMES;
+                value = new BinaryOperatorNode(new VariableAccessNode(firstToken), instruction, expression());
+            } else {
+                retreat();
+                return expression();
+            }
+
+            return new VariableReassignmentNode(firstToken, value);
         }
         return expression();
     }
@@ -103,6 +128,13 @@ public class Parser {
             case BOOLEAN -> Boolean.class;
             default -> Object.class;
         };
+        expect(Instruction.IDENTIFIER);
+        expect(Instruction.EQUAL);
+        return new VariableAssignmentNode(dataType, token, expression());
+    }
+
+    private Node reassignment(Token token) {
+        var dataType = SymbolTable.get(token.data()).getClass();
         expect(Instruction.IDENTIFIER);
         expect(Instruction.EQUAL);
         return new VariableAssignmentNode(dataType, token, expression());
@@ -144,7 +176,7 @@ public class Parser {
     private Node factor() {
         var tok = currentToken;
 
-        if (accept(Instruction.MINUS) || accept(Instruction.ADD)) {
+        if (accept(Instruction.MINUS) || accept(Instruction.PLUS)) {
             var value = power();
             retreat();
             if (accept(Instruction.INT_LITERAL) || accept(Instruction.DOUBLE_LITERAL)) {

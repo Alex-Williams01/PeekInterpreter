@@ -1,10 +1,7 @@
 package main.java.Interpreter;
 
-import main.java.ASTNodes.BinaryOperatorNode;
-import main.java.ASTNodes.BranchingNode;
-import main.java.ASTNodes.Node;
+import main.java.ASTNodes.*;
 import main.java.ASTNodes.Unary.*;
-import main.java.ASTNodes.VariableAssignmentNode;
 import main.java.Exceptions.UnexpectedTokenException;
 import main.java.Parser.Parser;
 import main.java.SymbolTable.SymbolTable;
@@ -34,7 +31,8 @@ public class Interpreter {
     public Object visit(Node node) {
         return switch(node) {
             case VariableAssignmentNode variableAssignmentNode -> visitVariableAssignmentNode(variableAssignmentNode);
-            case VariableAccessNode variableAccessNode ->  SymbolTable.get(variableAccessNode.getValue());
+            case VariableReassignmentNode variableReassignmentNode -> visitVariableReassignmentNode(variableReassignmentNode);
+            case VariableAccessNode variableAccessNode ->  visitVariableAccessNode(variableAccessNode);
             case BranchingNode branchingNode -> visitBranchingNode(branchingNode);
             case StringNode stringNode -> visitUnaryNode(stringNode, 1);
             case DoubleNode doubleNode ->visitUnaryNode(doubleNode, 1);
@@ -44,6 +42,12 @@ public class Interpreter {
             case BinaryOperatorNode binaryOperatorNode -> visitBinary(binaryOperatorNode);
             default -> null;
         };
+    }
+
+    private Object visitVariableAccessNode(VariableAccessNode variableAccessNode) {
+        var value = SymbolTable.get(variableAccessNode.getValue());
+        if (value == null) throw new RuntimeException("variable '%s' does not exist".formatted(variableAccessNode.getValue()));
+        return value;
     }
 
     private Object visitBranchingNode(BranchingNode branchingNode) {
@@ -61,7 +65,7 @@ public class Interpreter {
     private Object visitUnaryOperator(UnaryOperatorNode node) {
         var value = visit(node.getValue());
         return switch(node.getOperator()) {
-            case ADD ->  value;
+            case PLUS ->  value;
             case MINUS ->  ((Number)value).negated();
             case NOT -> {
                 if (value instanceof Boolean booleanExpression) {
@@ -108,6 +112,22 @@ public class Interpreter {
         var varClass = variableAssignmentNode.getDataType();
         if (varClass.isInstance(value)) {
             SymbolTable.set(variableAssignmentNode.getVariableName(), value);
+            return value;
+        }
+        //TODO REPLACE WITH CUSTOM EXCEPTION
+        throw new ClassCastException("cannot convert %s to %s".formatted(
+                value, varClass
+        ));
+    }
+
+    private Object visitVariableReassignmentNode(VariableReassignmentNode variableReassignmentNode) {
+        if (!SymbolTable.exists(variableReassignmentNode.getVariableName())) {
+            throw new RuntimeException("Identifier '%s' does not exist".formatted(variableReassignmentNode.getVariableName()));
+        }
+        var value = visit(variableReassignmentNode.getExpression());
+        var varClass = SymbolTable.get(variableReassignmentNode.getVariableName()).getClass();
+        if (varClass.isInstance(value)) {
+            SymbolTable.set(variableReassignmentNode.getVariableName(), value);
             return value;
         }
         //TODO REPLACE WITH CUSTOM EXCEPTION
@@ -175,7 +195,7 @@ public class Interpreter {
 
     private Object visitStringNode(String left, BinaryOperatorNode binaryOperatorNode) {
         var rightUntyped = visit(binaryOperatorNode.getRightNode());
-        if (binaryOperatorNode.getOperatorType().equals(Instruction.ADD)) {
+        if (binaryOperatorNode.getOperatorType().equals(Instruction.PLUS)) {
             return left.add(rightUntyped);
         } else {
             throw new UnexpectedTokenException("Unknown operator %s".formatted(binaryOperatorNode));
@@ -196,7 +216,7 @@ public class Interpreter {
         }
         return switch(binaryOperatorNode.getOperatorType()) {
             case POWER -> left.pow(right);
-            case ADD -> left.add(right);
+            case PLUS -> left.add(right);
             case MINUS -> left.minus(right);
             case DIVIDE -> left.divideBy(right);
             case TIMES -> left.multiplyBy(right);

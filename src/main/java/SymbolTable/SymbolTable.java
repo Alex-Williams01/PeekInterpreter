@@ -15,4 +15,8 @@ public class SymbolTable {
     public static Object get(String name) {
         return symbols.get(name);
     }
+
+    public static boolean exists(String name) {
+        return symbols.containsKey(name);
+    }
 }
