@@ -66,7 +66,12 @@ public class Interpreter {
         var value = visit(node.getValue());
         return switch(node.getOperator()) {
             case PLUS ->  value;
-            case MINUS ->  ((Number)value).negated();
+            case MINUS ->  {
+                if (value instanceof Number number) {
+                    yield number.negated();
+                }
+                throw new RuntimeException("BAD OPERAND");
+            }
             case NOT -> {
                 if (value instanceof Boolean booleanExpression) {
                     yield booleanExpression.negate();
@@ -113,6 +118,10 @@ public class Interpreter {
         if (varClass.isInstance(value)) {
             SymbolTable.set(variableAssignmentNode.getVariableName(), value);
             return value;
+        } else if (value instanceof Integer integer && varClass.equals(Double.class)) {
+            var promotedValue = new Double(integer.getValue());
+            SymbolTable.set(variableAssignmentNode.getVariableName(), promotedValue);
+            return promotedValue;
         }
         //TODO REPLACE WITH CUSTOM EXCEPTION
         throw new ClassCastException("cannot convert %s to %s".formatted(
@@ -185,12 +194,29 @@ public class Interpreter {
 
     private Object visitBinaryOperator(BinaryOperatorNode operatorNode) {
         var left = visit(operatorNode.getLeftNode());
+        var right = visit(operatorNode.getRightNode());
+
+        if(left instanceof Number leftNum && right instanceof Number rightNum) {
+            leftNum = promoteNumber(leftNum, rightNum);
+            rightNum = promoteNumber(rightNum, leftNum);
+            return switch(leftNum) {
+                case Integer leftInteger -> visitNumberNode(leftInteger, (Integer)rightNum, operatorNode, Integer.class);
+                case Double leftDouble -> visitNumberNode(leftDouble, (Double) rightNum, operatorNode, Double.class);
+                default -> throw new IllegalStateException("Unexpected value: " + left);
+            };
+        }
+
         return switch(left) {
-            case Integer leftInteger -> visitNumberNode(leftInteger, operatorNode, Integer.class);
-            case Double leftDouble -> visitNumberNode(leftDouble, operatorNode, Double.class);
             case String leftString -> visitStringNode(leftString, operatorNode);
             default -> throw new IllegalStateException("Unexpected value: " + left);
         };
+    }
+
+    private Number promoteNumber(Number left, Number right) {
+        if (left instanceof Integer integer && right instanceof Double) {
+            return new Double(integer.getValue());
+        }
+        return left;
     }
 
     private Object visitStringNode(String left, BinaryOperatorNode binaryOperatorNode) {
@@ -202,18 +228,9 @@ public class Interpreter {
         }
     }
 
-    private <T extends Number<T, U>, U> Number<T, U> visitNumberNode(T left,
+    private <T extends Number<T, U>, U> Number<T, U> visitNumberNode(T left, T right,
                                                                      BinaryOperatorNode binaryOperatorNode,
                                                                      Class<T> clazz) {
-        var rightUntyped =  visit(binaryOperatorNode.getRightNode());
-        T right;
-        try {
-            //
-            right = clazz.cast(rightUntyped);
-        } catch (ClassCastException e) {
-            //TODO replace with BadOperandException
-            throw new ClassCastException("Cannot convert %s to %s".formatted(rightUntyped, left.getClass()));
-        }
         return switch(binaryOperatorNode.getOperatorType()) {
             case POWER -> left.pow(right);
             case PLUS -> left.add(right);

@@ -10,6 +10,7 @@ import main.java.Token.Instruction;
 import main.java.Token.Token;
 import main.java.Token.TokenisedLine;
 import main.java.Wrapper.Boolean;
+import main.java.Wrapper.Number.Double;
 import main.java.Wrapper.Number.Integer;
 import java.lang.String;
 
@@ -66,7 +67,8 @@ public class Parser {
 
     private Node statement() {
         var firstToken = currentToken;
-        if (accept(Instruction.INT) || accept(Instruction.STRING) || accept(Instruction.BOOLEAN))  {
+        if (accept(Instruction.INT) || accept(Instruction.STRING) || accept(Instruction.BOOLEAN)
+        || accept(Instruction.DOUBLE))  {
             return assignment(firstToken, currentToken);
         } else if (accept(Instruction.IF)) {
             return branch();
@@ -126,6 +128,7 @@ public class Parser {
             case STRING -> main.java.Wrapper.String.class;
             case INT -> Integer.class;
             case BOOLEAN -> Boolean.class;
+            case DOUBLE -> Double.class;
             default -> Object.class;
         };
         expect(Instruction.IDENTIFIER);
@@ -178,8 +181,12 @@ public class Parser {
 
         if (accept(Instruction.MINUS) || accept(Instruction.PLUS)) {
             var value = power();
+            if (currentToken.instruction().equals(Instruction.EOL)) {
+                return  new UnaryOperatorNode(tok.instruction(), value);
+            }
             retreat();
-            if (accept(Instruction.INT_LITERAL) || accept(Instruction.DOUBLE_LITERAL)) {
+            if (accept(Instruction.INT_LITERAL) || accept(Instruction.DOUBLE_LITERAL)
+                || accept(Instruction.IDENTIFIER)) {
                 return new UnaryOperatorNode(tok.instruction(), value);
             } else {
                 throw new UnexpectedTokenException("Unexpected token '%s',"

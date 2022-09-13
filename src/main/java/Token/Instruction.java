@@ -44,6 +44,7 @@ public enum Instruction {
     INT("int", "^int$", DATA_TYPE),
     STRING("String", "^String$", DATA_TYPE),
     BOOLEAN("Boolean", "^bool$", DATA_TYPE),
+    DOUBLE("Double", "^double$", DATA_TYPE),
     PRINT("print", "^print$", OTHER),
     LBRACE("left brace", "^\\{$", OTHER),
     RBRACE("right brace", "^\\}$", OTHER),
