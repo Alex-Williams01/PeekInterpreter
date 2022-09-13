@@ -174,6 +174,7 @@ public class Interpreter {
             return switch(operator) {
                 case AND -> left.and(right);
                 case OR -> left.or(right);
+                case XOR -> left.exclusiveOr(right);
                 default -> throw new IllegalStateException("Unexpected value: " + operator);
             };
         } catch (ClassCastException e) {

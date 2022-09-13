@@ -15,3 +15,4 @@ int w = 14
 int x = 13
 int y = 30
 double z = w * x / y
+false xor true

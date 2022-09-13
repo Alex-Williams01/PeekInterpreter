@@ -3,9 +3,9 @@
   <component name="ChangeListManager">
     <list default="true" id="63d04510-ce56-4814-a3a3-a58845350b99" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/Interpreter/Interpreter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Interpreter/Interpreter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Parser/Parser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Parser/Parser.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Token/Instruction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Token/Instruction.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Wrapper/Boolean.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Wrapper/Boolean.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/test.txt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/test.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -106,7 +106,7 @@
       <workItem from="1662431847810" duration="103095000" />
       <workItem from="1662845746150" duration="4478000" />
       <workItem from="1662997898207" duration="2004000" />
-      <workItem from="1663015765943" duration="15770000" />
+      <workItem from="1663015765943" duration="17357000" />
     </task>
     <task id="LOCAL-00001" summary="Added basic lexer, parser and interpreter">
       <created>1662427977151</created>
@@ -234,7 +234,14 @@
       <option name="project" value="LOCAL" />
       <updated>1663030831491</updated>
     </task>
-    <option name="localTasksCounter" value="19" />
+    <task id="LOCAL-00019" summary="Cleanup">
+      <created>1663032514992</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1663032514992</updated>
+    </task>
+    <option name="localTasksCounter" value="20" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -290,11 +297,11 @@
     <MESSAGE value="Bug fixes and cleanup" />
     <MESSAGE value="Added power operator" />
     <MESSAGE value="Added conditional branching" />
-    <MESSAGE value="Cleanup" />
     <MESSAGE value="Added pre and post increment and decrement" />
     <MESSAGE value="Added modulus operator" />
     <MESSAGE value="Added other assignment operators" />
     <MESSAGE value="Fixed bugs, added double data type instruction, add numeric promotion" />
-    <option name="LAST_COMMIT_MESSAGE" value="Fixed bugs, added double data type instruction, add numeric promotion" />
+    <MESSAGE value="Cleanup" />
+    <option name="LAST_COMMIT_MESSAGE" value="Cleanup" />
   </component>
 </project>

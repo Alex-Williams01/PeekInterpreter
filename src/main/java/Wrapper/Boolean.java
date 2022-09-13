@@ -17,6 +17,9 @@ public class Boolean extends Object<java.lang.Boolean> {
     public Boolean or(Boolean other) {
         return new Boolean(value || other.value);
     }
+    public Boolean exclusiveOr(Boolean other) {
+        return new Boolean(value ^ other.value);
+    }
     @Override
     public String parseString() {
         return String.valueOf(value);

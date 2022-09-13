@@ -41,6 +41,7 @@ public enum Instruction {
     NOT("Not Operator (!)","^!$", OPERATOR_LOGICAL),
     AND("And", "^and$", OPERATOR_LOGICAL),
     OR("Or", "^or$", OPERATOR_LOGICAL),
+    XOR("Exclusive OR", "^xor$", OPERATOR_LOGICAL),
     INT("int", "^int$", DATA_TYPE),
     STRING("String", "^String$", DATA_TYPE),
     BOOLEAN("Boolean", "^bool$", DATA_TYPE),
