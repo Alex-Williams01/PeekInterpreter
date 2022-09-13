@@ -136,13 +136,6 @@ public class Parser {
         return new VariableAssignmentNode(dataType, token, expression());
     }
 
-    private Node reassignment(Token token) {
-        var dataType = SymbolTable.get(token.data()).getClass();
-        expect(Instruction.IDENTIFIER);
-        expect(Instruction.EQUAL);
-        return new VariableAssignmentNode(dataType, token, expression());
-    }
-
     private Node compExpression() {
         if (accept(Instruction.NOT)) {
             return new UnaryOperatorNode(Instruction.NOT, compExpression());

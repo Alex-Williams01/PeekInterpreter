@@ -3,9 +3,9 @@
   <component name="ChangeListManager">
     <list default="true" id="63d04510-ce56-4814-a3a3-a58845350b99" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/Interpreter/Interpreter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Interpreter/Interpreter.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/Parser/Parser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Parser/Parser.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Token/Instruction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Token/Instruction.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/test.txt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/test.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -106,7 +106,7 @@
       <workItem from="1662431847810" duration="103095000" />
       <workItem from="1662845746150" duration="4478000" />
       <workItem from="1662997898207" duration="2004000" />
-      <workItem from="1663015765943" duration="14009000" />
+      <workItem from="1663015765943" duration="15770000" />
     </task>
     <task id="LOCAL-00001" summary="Added basic lexer, parser and interpreter">
       <created>1662427977151</created>
@@ -227,7 +227,14 @@
       <option name="project" value="LOCAL" />
       <updated>1663026339278</updated>
     </task>
-    <option name="localTasksCounter" value="18" />
+    <task id="LOCAL-00018" summary="Fixed bugs, added double data type instruction, add numeric promotion">
+      <created>1663030831491</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1663030831491</updated>
+    </task>
+    <option name="localTasksCounter" value="19" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -287,17 +294,7 @@
     <MESSAGE value="Added pre and post increment and decrement" />
     <MESSAGE value="Added modulus operator" />
     <MESSAGE value="Added other assignment operators" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added other assignment operators" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/Interpreter/Interpreter.java</url>
-          <line>148</line>
-          <option name="timeStamp" value="55" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
+    <MESSAGE value="Fixed bugs, added double data type instruction, add numeric promotion" />
+    <option name="LAST_COMMIT_MESSAGE" value="Fixed bugs, added double data type instruction, add numeric promotion" />
   </component>
 </project>

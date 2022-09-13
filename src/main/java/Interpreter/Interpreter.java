@@ -79,24 +79,34 @@ public class Interpreter {
                 throw new RuntimeException("BAD OPERAND");
             }
             case PRE_INCREMENT -> {
-                var newValue = ((Number)value).increment();
-                SymbolTable.set(((VariableAccessNode)node.getValue()).getValue(), newValue);
-                yield newValue;
+                if (value instanceof Number number) {
+                    var newValue = number.increment();
+                    SymbolTable.set(((VariableAccessNode)node.getValue()).getValue(), newValue);
+                    yield newValue;
+                }
+                throw new RuntimeException("BAD OPERAND");
             }
             case POST_INCREMENT -> {
-                var newValue = ((Number)value).increment();
-                SymbolTable.set(((VariableAccessNode)node.getValue()).getValue(), newValue);
-                yield value;
+                if (value instanceof Number number) {
+                    SymbolTable.set(((VariableAccessNode)node.getValue()).getValue(), number.increment());
+                    yield value;
+                }
+                throw new RuntimeException("BAD OPERAND");
             }
             case PRE_DECREMENT -> {
-                var newValue = ((Number)value).decrement();
-                SymbolTable.set(((VariableAccessNode)node.getValue()).getValue(), newValue);
-                yield newValue;
+                if (value instanceof Number number) {
+                    var newValue = number.decrement();
+                    SymbolTable.set(((VariableAccessNode)node.getValue()).getValue(), newValue);
+                    yield newValue;
+                }
+                throw new RuntimeException("BAD OPERAND");
             }
             case POST_DECREMENT -> {
-                var newValue = ((Number)value).decrement();
-                SymbolTable.set(((VariableAccessNode)node.getValue()).getValue(), newValue);
-                yield value;
+                if (value instanceof Number number) {
+                    SymbolTable.set(((VariableAccessNode)node.getValue()).getValue(), number.decrement());
+                    yield value;
+                }
+                throw new RuntimeException("BAD OPERAND");
             }
             default -> null;
         };
@@ -197,8 +207,8 @@ public class Interpreter {
         var right = visit(operatorNode.getRightNode());
 
         if(left instanceof Number leftNum && right instanceof Number rightNum) {
-            leftNum = promoteNumber(leftNum, rightNum);
-            rightNum = promoteNumber(rightNum, leftNum);
+            leftNum = promoteNumber(leftNum, rightNum.getClass());
+            rightNum = promoteNumber(rightNum, leftNum.getClass());
             return switch(leftNum) {
                 case Integer leftInteger -> visitNumberNode(leftInteger, (Integer)rightNum, operatorNode, Integer.class);
                 case Double leftDouble -> visitNumberNode(leftDouble, (Double) rightNum, operatorNode, Double.class);
@@ -212,11 +222,11 @@ public class Interpreter {
         };
     }
 
-    private Number promoteNumber(Number left, Number right) {
-        if (left instanceof Integer integer && right instanceof Double) {
+    private <T extends Number<T, U>, U> Number promoteNumber(Number value, Class<T> clazz) {
+        if (value instanceof Integer integer && clazz.equals(Double.class)) {
             return new Double(integer.getValue());
         }
-        return left;
+        return value;
     }
 
     private Object visitStringNode(String left, BinaryOperatorNode binaryOperatorNode) {
