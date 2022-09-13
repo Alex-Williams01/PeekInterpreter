@@ -1,19 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="63d04510-ce56-4814-a3a3-a58845350b99" name="Changes" comment="Added XOR">
-      <change afterPath="$PROJECT_DIR$/src/main/java/ASTNodes/Loop/ForNode.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/ASTNodes/Loop/LoopNode.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/ASTNodes/Loop/WhileNode.java" afterDir="false" />
+    <list default="true" id="63d04510-ce56-4814-a3a3-a58845350b99" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ASTNodes/VariableAssignmentNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ASTNodes/Variables/VariableAssignmentNode.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ASTNodes/VariableReassignmentNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ASTNodes/Variables/VariableReassignmentNode.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Interpreter/Interpreter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Interpreter/Interpreter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Lexer/Lexer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Lexer/Lexer.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/Parser/Parser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Parser/Parser.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Token/Instruction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Token/Instruction.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Token/InstructionType.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Token/InstructionType.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/test.txt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/test.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -114,7 +104,7 @@
       <workItem from="1662431847810" duration="103095000" />
       <workItem from="1662845746150" duration="4478000" />
       <workItem from="1662997898207" duration="2004000" />
-      <workItem from="1663015765943" duration="24119000" />
+      <workItem from="1663015765943" duration="26214000" />
     </task>
     <task id="LOCAL-00001" summary="Added basic lexer, parser and interpreter">
       <created>1662427977151</created>
@@ -256,7 +246,14 @@
       <option name="project" value="LOCAL" />
       <updated>1663034385735</updated>
     </task>
-    <option name="localTasksCounter" value="21" />
+    <task id="LOCAL-00021" summary="Added for and while loops">
+      <created>1663041415009</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1663041415009</updated>
+    </task>
+    <option name="localTasksCounter" value="22" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -318,15 +315,16 @@
     <MESSAGE value="Fixed bugs, added double data type instruction, add numeric promotion" />
     <MESSAGE value="Cleanup" />
     <MESSAGE value="Added XOR" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added XOR" />
+    <MESSAGE value="Added for and while loops" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added for and while loops" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/Parser/Parser.java</url>
-          <line>237</line>
-          <option name="timeStamp" value="73" />
+          <url>file://$PROJECT_DIR$/src/main/java/Interpreter/Interpreter.java</url>
+          <line>64</line>
+          <option name="timeStamp" value="74" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

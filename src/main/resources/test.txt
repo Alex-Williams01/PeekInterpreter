@@ -17,4 +17,5 @@ int y = 30
 double z = w * x / y
 false xor true
 int counter = 0
-for (int i=1; i++; i<10) { counter+=i }
+while (counter <  2) { counter++ }
+for (int i=1; i<=10; i++) { i }

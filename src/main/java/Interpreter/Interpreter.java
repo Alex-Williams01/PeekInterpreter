@@ -68,8 +68,8 @@ public class Interpreter {
         if (condition instanceof Boolean boolExpr) {
             while(boolExpr.getValue()) {
                 body = visit(forNode.getBody());
-                boolExpr = (Boolean) visit(forNode.getBooleanExpressionNode());
                 visit(forNode.getStepNode());
+                boolExpr = (Boolean) visit(forNode.getBooleanExpressionNode());
             }
         }
         return body;

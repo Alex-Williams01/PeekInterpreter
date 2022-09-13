@@ -236,9 +236,9 @@ public class Parser {
         expect(Instruction.LPAREN);
         var start = expression();
         expect(Instruction.SEMICOLON);
-        var step = expression();
-        expect(Instruction.SEMICOLON);
         var booleanExpression = expression();
+        expect(Instruction.SEMICOLON);
+        var step = expression();
         expect(Instruction.RPAREN);
         expect(Instruction.LBRACE);
         var body = block();
