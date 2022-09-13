@@ -1,7 +1,11 @@
 package main.java.Interpreter;
 
 import main.java.ASTNodes.*;
+import main.java.ASTNodes.Loop.ForNode;
+import main.java.ASTNodes.Loop.WhileNode;
 import main.java.ASTNodes.Unary.*;
+import main.java.ASTNodes.Variables.VariableAssignmentNode;
+import main.java.ASTNodes.Variables.VariableReassignmentNode;
 import main.java.Exceptions.UnexpectedTokenException;
 import main.java.Parser.Parser;
 import main.java.SymbolTable.SymbolTable;
@@ -24,8 +28,7 @@ public class Interpreter {
     public void start() {
         var AST = parser.parse();
         while (AST.hasNext()) {
-            var x = AST.next();
-            System.out.println(visit(x));
+            System.out.println(visit(AST.next()));
         }
     }
     public Object visit(Node node) {
@@ -40,8 +43,36 @@ public class Interpreter {
             case BooleanNode booleanNode -> visitUnaryNode(booleanNode, 1);
             case UnaryOperatorNode unaryOperatorNode -> visitUnaryOperator(unaryOperatorNode);
             case BinaryOperatorNode binaryOperatorNode -> visitBinary(binaryOperatorNode);
+            case WhileNode whileNode -> visitWhileNode(whileNode);
+            case ForNode forNode -> visitForNode(forNode);
             default -> null;
         };
+    }
+
+    private Object visitWhileNode(WhileNode whileNode) {
+        var condition = visit(whileNode.getBooleanExpressionNode());
+        Object body = null;
+        if (condition instanceof Boolean boolExpr) {
+            while(boolExpr.getValue()) {
+                body = visit(whileNode.getBody());
+                boolExpr = (Boolean) visit(whileNode.getBooleanExpressionNode());
+            }
+        }
+        return body;
+    }
+
+    private Object visitForNode(ForNode forNode) {
+        Object body = null;
+        visit(forNode.getStartValue());
+        Object condition = visit(forNode.getBooleanExpressionNode());
+        if (condition instanceof Boolean boolExpr) {
+            while(boolExpr.getValue()) {
+                body = visit(forNode.getBody());
+                boolExpr = (Boolean) visit(forNode.getBooleanExpressionNode());
+                visit(forNode.getStepNode());
+            }
+        }
+        return body;
     }
 
     private Object visitVariableAccessNode(VariableAccessNode variableAccessNode) {

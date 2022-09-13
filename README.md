@@ -7,9 +7,7 @@
 block: { statement }
        | statement
 
-statement: TYPE IDENITIFER EQ expr
-           | IF (expr) block ELSE block
-           | IDENTIFIER EQ expr
+statement: IF (expr) block ELSE block
            | expr
 
 expr: comp-expr ((AND|OR) comp-expr)*
@@ -31,4 +29,8 @@ modulus: atom (MODULUS factor)*
 atom: INT | DOUBLE | STRING | IDENTIFIER
       | LPARN expr RPAREN
       | (INCR | DECR)* IDENTIFIER (INCR | DECR)*
+      | WHILE (expr) { block }
+      | FOR (expr; expr; expr) { block } 
+      | TYPE IDENITIFER EQ expr
+      | IDENTIFIER EQ expr
 ````

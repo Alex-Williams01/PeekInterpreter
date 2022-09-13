@@ -1,11 +1,14 @@
 package main.java.Parser;
 
 import main.java.ASTNodes.*;
+import main.java.ASTNodes.Loop.ForNode;
+import main.java.ASTNodes.Loop.WhileNode;
 import main.java.ASTNodes.Unary.*;
+import main.java.ASTNodes.Variables.VariableAssignmentNode;
+import main.java.ASTNodes.Variables.VariableReassignmentNode;
 import main.java.Exceptions.MissingTokenException;
 import main.java.Exceptions.UnexpectedTokenException;
 import main.java.Lexer.Lexer;
-import main.java.SymbolTable.SymbolTable;
 import main.java.Token.Instruction;
 import main.java.Token.Token;
 import main.java.Token.TokenisedLine;
@@ -66,36 +69,8 @@ public class Parser {
     }
 
     private Node statement() {
-        var firstToken = currentToken;
-        if (accept(Instruction.INT) || accept(Instruction.STRING) || accept(Instruction.BOOLEAN)
-        || accept(Instruction.DOUBLE))  {
-            return assignment(firstToken, currentToken);
-        } else if (accept(Instruction.IF)) {
+        if (accept(Instruction.IF)) {
             return branch();
-        }
-        if (accept(Instruction.IDENTIFIER)) {
-            Instruction instruction;
-            Node value;
-            if (accept(Instruction.EQUAL)) {
-                value = expression();
-            } else if (accept(Instruction.PLUS_EQUAL)) {
-                instruction = Instruction.PLUS;
-                value = new BinaryOperatorNode(new VariableAccessNode(firstToken), instruction, expression());
-            } else if (accept(Instruction.MINUS_EQUAL)) {
-                instruction = Instruction.MINUS;
-                value = new BinaryOperatorNode(new VariableAccessNode(firstToken), instruction, expression());
-            } else if (accept(Instruction.DIVIDE_EQUAL)) {
-                instruction = Instruction.DIVIDE;
-                value = new BinaryOperatorNode(new VariableAccessNode(firstToken), instruction, expression());
-            } else if (accept(Instruction.TIMES_EQUAL)) {
-                instruction = Instruction.TIMES;
-                value = new BinaryOperatorNode(new VariableAccessNode(firstToken), instruction, expression());
-            } else {
-                retreat();
-                return expression();
-            }
-
-            return new VariableReassignmentNode(firstToken, value);
         }
         return expression();
     }
@@ -214,17 +189,65 @@ public class Parser {
                 yield new UnaryOperatorNode(Instruction.PRE_DECREMENT, val);
             }
             case IDENTIFIER -> {
+                Instruction instruction;
+                Node value;
                 if(accept(Instruction.INCREMENT)) {
                     yield new UnaryOperatorNode(Instruction.POST_INCREMENT, new VariableAccessNode(token));
                 } else if (accept(Instruction.DECREMENT)) {
                     yield new UnaryOperatorNode(Instruction.POST_DECREMENT, new VariableAccessNode(token));
+                } else if (accept(Instruction.EQUAL)) {
+                    value = expression();
+                } else if (accept(Instruction.PLUS_EQUAL)) {
+                    instruction = Instruction.PLUS;
+                    value = new BinaryOperatorNode(new VariableAccessNode(token), instruction, expression());
+                } else if (accept(Instruction.MINUS_EQUAL)) {
+                    instruction = Instruction.MINUS;
+                    value = new BinaryOperatorNode(new VariableAccessNode(token), instruction, expression());
+                } else if (accept(Instruction.DIVIDE_EQUAL)) {
+                    instruction = Instruction.DIVIDE;
+                    value = new BinaryOperatorNode(new VariableAccessNode(token), instruction, expression());
+                } else if (accept(Instruction.TIMES_EQUAL)) {
+                    instruction = Instruction.TIMES;
+                    value = new BinaryOperatorNode(new VariableAccessNode(token), instruction, expression());
+                } else {
+                    yield new VariableAccessNode(token);
                 }
-                yield new VariableAccessNode(token);
+
+                yield new VariableReassignmentNode(token, value);
             }
+            case INT, STRING, BOOLEAN, DOUBLE ->  assignment(token, currentToken);
+            case WHILE -> whileLoop();
+            case FOR -> forLoop();
             default -> throw new RuntimeException("Syntax error: expected literal or variable");
         };
     }
 
+    private Node whileLoop() {
+        expect(Instruction.LPAREN);
+        var booleanExpression = expression();
+        expect(Instruction.RPAREN);
+        expect(Instruction.LBRACE);
+        var body = block();
+        expect(Instruction.RBRACE);
+        return new WhileNode(booleanExpression, body);
+    }
+
+    private Node forLoop() {
+        expect(Instruction.LPAREN);
+        var start = expression();
+        expect(Instruction.SEMICOLON);
+        var step = expression();
+        expect(Instruction.SEMICOLON);
+        var booleanExpression = expression();
+        expect(Instruction.RPAREN);
+        expect(Instruction.LBRACE);
+        var body = block();
+        expect(Instruction.RBRACE);
+        if (start instanceof VariableAssignmentNode) {
+            return new ForNode(start, booleanExpression, step, body);
+        }
+        throw new RuntimeException("Invalid expression in for loop");
+    }
     private boolean expect(Instruction instruction) {
         if (accept(instruction)) {
             return true;

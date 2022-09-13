@@ -53,6 +53,9 @@ public enum Instruction {
     DOUBLE_LITERAL("double literal", "^\\d+[.]*\\d*$", LITERAL),
     STRING_LITERAL("String Literal", "^\".*\"$", LITERAL),
     BOOLEAN_LITERAL("Boolean Literal", "^true|false$", LITERAL),
+    FOR("For loop", "^for$",  LOOP),
+    WHILE("While loop", "^while$", LOOP),
+    SEMICOLON("Semicolon", "^;$", OPERATOR),
     IDENTIFIER("identifier", "^[A-Za-z_][a-zA-Z_0-9]*$", OTHER),
     EOL("End of Line", "EOF", OTHER);
 

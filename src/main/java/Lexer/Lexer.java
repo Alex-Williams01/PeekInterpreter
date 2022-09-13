@@ -132,6 +132,6 @@ public class Lexer {
 
     private boolean isOperator(Character character) {
         //TODO MAY BE ABLE TO CHANGE TO INSTRUCTION ENUM WHEN ADD ! UNARY OPERATOR
-        return List.of('!','>','<','=', '+', '-', '*','/').contains(character);
+        return List.of('!','>','<','=', '+', '-', '*','/',';').contains(character);
     }
 }
