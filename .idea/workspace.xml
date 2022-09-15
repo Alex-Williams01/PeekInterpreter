@@ -2,8 +2,16 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="63d04510-ce56-4814-a3a3-a58845350b99" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/java/ASTNodes/Function/FunctionCallNode.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/ASTNodes/Function/FunctionDefinitionNode.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/ASTNodes/Function/ParamNode.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/Wrapper/Function.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/Wrapper/Param.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Interpreter/Interpreter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Interpreter/Interpreter.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/Parser/Parser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Parser/Parser.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Token/Instruction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Token/Instruction.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/test.txt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/test.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -38,6 +46,7 @@
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
     &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;ignore.preview.features.used&quot;: &quot;true&quot;,
     &quot;last_opened_file_path&quot;: &quot;C:/Users/alexl/Downloads/MCP-Reborn&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
@@ -104,7 +113,9 @@
       <workItem from="1662431847810" duration="103095000" />
       <workItem from="1662845746150" duration="4478000" />
       <workItem from="1662997898207" duration="2004000" />
-      <workItem from="1663015765943" duration="26214000" />
+      <workItem from="1663015765943" duration="33522000" />
+      <workItem from="1663170492416" duration="1197000" />
+      <workItem from="1663201627483" duration="8840000" />
     </task>
     <task id="LOCAL-00001" summary="Added basic lexer, parser and interpreter">
       <created>1662427977151</created>
@@ -253,7 +264,14 @@
       <option name="project" value="LOCAL" />
       <updated>1663041415009</updated>
     </task>
-    <option name="localTasksCounter" value="22" />
+    <task id="LOCAL-00022" summary="Fixed loop bugs">
+      <created>1663043321598</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1663043321598</updated>
+    </task>
+    <option name="localTasksCounter" value="23" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -316,17 +334,7 @@
     <MESSAGE value="Cleanup" />
     <MESSAGE value="Added XOR" />
     <MESSAGE value="Added for and while loops" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added for and while loops" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/Interpreter/Interpreter.java</url>
-          <line>64</line>
-          <option name="timeStamp" value="74" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
+    <MESSAGE value="Fixed loop bugs" />
+    <option name="LAST_COMMIT_MESSAGE" value="Fixed loop bugs" />
   </component>
 </project>

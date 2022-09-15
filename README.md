@@ -24,7 +24,9 @@ factor: (PLUS|MINUS)* power
 
 power: modulus (POW factor)*
 
-modulus: atom (MODULUS factor)*
+modulus: call (MODULUS factor)*
+
+call: atom (LPAREN (expr (COMMA exr)*)? RPAREN)?
         
 atom: INT | DOUBLE | STRING | IDENTIFIER
       | LPARN expr RPAREN
@@ -33,4 +35,7 @@ atom: INT | DOUBLE | STRING | IDENTIFIER
       | FOR (expr; expr; expr) { block } 
       | TYPE IDENITIFER EQ expr
       | IDENTIFIER EQ expr
+      | FUNCTION TYPE IDENTIFIER 
+        LPAREN (TYPE IDENTIFIER (COMMA TYPE IDENTIFIER)*)
+        LBRACE block RBRACE 
 ````

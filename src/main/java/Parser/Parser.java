@@ -1,6 +1,9 @@
 package main.java.Parser;
 
 import main.java.ASTNodes.*;
+import main.java.ASTNodes.Function.FunctionCallNode;
+import main.java.ASTNodes.Function.FunctionDefinitionNode;
+import main.java.ASTNodes.Function.ParamNode;
 import main.java.ASTNodes.Loop.ForNode;
 import main.java.ASTNodes.Loop.WhileNode;
 import main.java.ASTNodes.Unary.*;
@@ -98,19 +101,6 @@ public class Parser {
         return binaryOperator(() -> compExpression, Instruction.getLogicalOperators(), this::compExpression);
     }
 
-    private Node assignment(Token dataTypeToken, Token token) {
-        var dataType = switch(dataTypeToken.instruction()) {
-            case STRING -> main.java.Wrapper.String.class;
-            case INT -> Integer.class;
-            case BOOLEAN -> Boolean.class;
-            case DOUBLE -> Double.class;
-            default -> Object.class;
-        };
-        expect(Instruction.IDENTIFIER);
-        expect(Instruction.EQUAL);
-        return new VariableAssignmentNode(dataType, token, expression());
-    }
-
     private Node compExpression() {
         if (accept(Instruction.NOT)) {
             return new UnaryOperatorNode(Instruction.NOT, compExpression());
@@ -121,29 +111,10 @@ public class Parser {
     private Node arithExpression() {
         return binaryOperator(this::term, Instruction.getAdditiveOperators(), this::term);
     }
+
     private Node term() {
         return binaryOperator(this::factor,  Instruction.getMultiplicativeOperators(), this::factor);
     }
-
-    private Node power() {
-        return binaryOperator(this::modulus, Map.of(Instruction.POWER.name(), Instruction.POWER.getPatternMatcher()), this::factor);
-    }
-
-    private Node modulus() {
-        return binaryOperator(this::atom, Map.of(Instruction.MODULUS.name(), Instruction.MODULUS.getPatternMatcher()), this::factor);
-    }
-
-    private Node binaryOperator(Supplier<Node> function, Map<String, String> operatorTypes, Supplier<Node> secondaryFunction) {
-        Node left = function.get();
-        while (operatorTypes.containsValue(currentToken.instruction().getPatternMatcher())) {
-            var operatorToken = currentToken;
-            advance();
-            Node right = secondaryFunction.get();
-            left = new BinaryOperatorNode(left, operatorToken.instruction(), right);
-        }
-        return left;
-    }
-
     private Node factor() {
         var tok = currentToken;
 
@@ -154,7 +125,7 @@ public class Parser {
             }
             retreat();
             if (accept(Instruction.INT_LITERAL) || accept(Instruction.DOUBLE_LITERAL)
-                || accept(Instruction.IDENTIFIER)) {
+                    || accept(Instruction.IDENTIFIER)) {
                 return new UnaryOperatorNode(tok.instruction(), value);
             } else {
                 throw new UnexpectedTokenException("Unexpected token '%s',"
@@ -163,6 +134,33 @@ public class Parser {
         } else {
             return power();
         }
+    }
+
+    private Node power() {
+        return binaryOperator(this::modulus, Map.of(Instruction.POWER.name(), Instruction.POWER.getPatternMatcher()), this::factor);
+    }
+
+    private Node modulus() {
+        return binaryOperator(this::call, Map.of(Instruction.MODULUS.name(), Instruction.MODULUS.getPatternMatcher()), this::call);
+    }
+
+    private Node call() {
+        var identifierName = currentToken;
+        var atom = atom();
+        if (accept(Instruction.LPAREN)) {
+            //TODO UNIFY PARAM
+            List<Node> params = new ArrayList<>();
+            if (accept(Instruction.RPAREN)) {
+                return new FunctionCallNode(params, identifierName);
+            }
+            params.add(expression());
+            while (accept(Instruction.COMMA)) {
+                params.add(expression());
+            }
+            expect(Instruction.RPAREN);
+            return new FunctionCallNode(params, identifierName);
+        }
+        return atom;
     }
 
     private Node atom() {
@@ -218,8 +216,56 @@ public class Parser {
             case INT, STRING, BOOLEAN, DOUBLE ->  assignment(token, currentToken);
             case WHILE -> whileLoop();
             case FOR -> forLoop();
+            case FUNCTION -> function();
             default -> throw new RuntimeException("Syntax error: expected literal or variable");
         };
+    }
+
+    private Node binaryOperator(Supplier<Node> function, Map<String, String> operatorTypes, Supplier<Node> secondaryFunction) {
+        Node left = function.get();
+        while (operatorTypes.containsValue(currentToken.instruction().getPatternMatcher())) {
+            var operatorToken = currentToken;
+            advance();
+            Node right = secondaryFunction.get();
+            left = new BinaryOperatorNode(left, operatorToken.instruction(), right);
+        }
+        return left;
+    }
+
+    private Node function() {
+        var functionReturnType = getDataType();
+        var functionName = currentToken;
+        expect(Instruction.IDENTIFIER);
+        expect(Instruction.LPAREN);
+        List<ParamNode> params = new ArrayList<>();
+        if(accept(Instruction.RPAREN)) {
+            expect(Instruction.LBRACE);
+            var functionBlock = block();
+            expect(Instruction.RBRACE);
+            return  new FunctionDefinitionNode(params, functionReturnType, functionName, functionBlock);
+        }
+        var dataType = getDataType();
+        params.add(new ParamNode(dataType, currentToken));
+        advance();
+        while (accept(Instruction.COMMA)) {
+            dataType = getDataType();
+            params.add(new ParamNode(dataType, currentToken));
+            advance();
+        }
+        expect(Instruction.RPAREN);
+        expect(Instruction.LBRACE);
+        var functionBlock = block();
+        expect(Instruction.RBRACE);
+        return new FunctionDefinitionNode(params, functionReturnType, functionName, functionBlock);
+    }
+
+    private Instruction getDataType() {
+        var instructionType = currentToken.instruction();
+        if(accept(Instruction.DOUBLE) || accept(Instruction.INT) ||
+                accept(Instruction.BOOLEAN) || accept(Instruction.STRING)) {
+            return instructionType;
+        }
+        throw new RuntimeException("AHHH");
     }
 
     private Node whileLoop() {
@@ -247,6 +293,19 @@ public class Parser {
             return new ForNode(start, booleanExpression, step, body);
         }
         throw new RuntimeException("Invalid expression in for loop");
+    }
+
+    private Node assignment(Token dataTypeToken, Token token) {
+        var dataType = switch(dataTypeToken.instruction()) {
+            case STRING -> main.java.Wrapper.String.class;
+            case INT -> Integer.class;
+            case BOOLEAN -> Boolean.class;
+            case DOUBLE -> Double.class;
+            default -> Object.class;
+        };
+        expect(Instruction.IDENTIFIER);
+        expect(Instruction.EQUAL);
+        return new VariableAssignmentNode(dataType, token, expression());
     }
     private boolean expect(Instruction instruction) {
         if (accept(instruction)) {

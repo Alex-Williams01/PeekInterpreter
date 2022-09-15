@@ -19,3 +19,6 @@ false xor true
 int counter = 0
 while (counter <  2) { counter++ }
 for (int i=1; i<=10; i++) { i }
+function int add(int a, int b) { a + b }
+function int getCounter() { counter }
+add(5, getCounter())

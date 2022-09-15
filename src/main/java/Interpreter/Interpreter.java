@@ -1,6 +1,8 @@
 package main.java.Interpreter;
 
 import main.java.ASTNodes.*;
+import main.java.ASTNodes.Function.FunctionCallNode;
+import main.java.ASTNodes.Function.FunctionDefinitionNode;
 import main.java.ASTNodes.Loop.ForNode;
 import main.java.ASTNodes.Loop.WhileNode;
 import main.java.ASTNodes.Unary.*;
@@ -11,11 +13,15 @@ import main.java.Parser.Parser;
 import main.java.SymbolTable.SymbolTable;
 import main.java.Token.Instruction;
 import main.java.Wrapper.Boolean;
+import main.java.Wrapper.Function;
 import main.java.Wrapper.Number.Double;
 import main.java.Wrapper.Number.Integer;
 import main.java.Wrapper.Number.Number;
 import main.java.Wrapper.Object;
 import main.java.Wrapper.String;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Interpreter {
 
@@ -28,10 +34,12 @@ public class Interpreter {
     public void start() {
         var AST = parser.parse();
         while (AST.hasNext()) {
-            System.out.println(visit(AST.next()));
+            var x = AST.next();
+            System.out.println(x);
+            System.out.println(visit(x));
         }
     }
-    public Object visit(Node node) {
+    public static Object visit(Node node) {
         return switch(node) {
             case VariableAssignmentNode variableAssignmentNode -> visitVariableAssignmentNode(variableAssignmentNode);
             case VariableReassignmentNode variableReassignmentNode -> visitVariableReassignmentNode(variableReassignmentNode);
@@ -45,11 +53,29 @@ public class Interpreter {
             case BinaryOperatorNode binaryOperatorNode -> visitBinary(binaryOperatorNode);
             case WhileNode whileNode -> visitWhileNode(whileNode);
             case ForNode forNode -> visitForNode(forNode);
+            case FunctionDefinitionNode functionDefinitionNode -> visitFunctionDefinitionNode(functionDefinitionNode);
+            case FunctionCallNode functionCallNode -> visitFunctionCallNode(functionCallNode);
             default -> null;
         };
     }
 
-    private Object visitWhileNode(WhileNode whileNode) {
+    private static Object visitFunctionCallNode(FunctionCallNode functionCallNode) {
+        var symbolValue = SymbolTable.get(functionCallNode.getFunctionName());
+        if (symbolValue instanceof Function function) {
+            List<Object> args = new ArrayList<>();
+            functionCallNode.getArgumentList().forEach(node -> args.add(visit(node)));
+            return function.execute(args);
+        }
+        throw new RuntimeException("AHHH");
+    }
+
+    private static Object visitFunctionDefinitionNode(FunctionDefinitionNode functionDefinitionNode) {
+        var function = new Function(functionDefinitionNode);
+        SymbolTable.set(functionDefinitionNode.getFunctionName(), function);
+        return function;
+    }
+
+    private static Object visitWhileNode(WhileNode whileNode) {
         var condition = visit(whileNode.getBooleanExpressionNode());
         Object body = null;
         if (condition instanceof Boolean boolExpr) {
@@ -61,7 +87,7 @@ public class Interpreter {
         return body;
     }
 
-    private Object visitForNode(ForNode forNode) {
+    private static Object visitForNode(ForNode forNode) {
         Object body = null;
         visit(forNode.getStartValue());
         Object condition = visit(forNode.getBooleanExpressionNode());
@@ -75,13 +101,13 @@ public class Interpreter {
         return body;
     }
 
-    private Object visitVariableAccessNode(VariableAccessNode variableAccessNode) {
+    private static Object visitVariableAccessNode(VariableAccessNode variableAccessNode) {
         var value = SymbolTable.get(variableAccessNode.getValue());
         if (value == null) throw new RuntimeException("variable '%s' does not exist".formatted(variableAccessNode.getValue()));
         return value;
     }
 
-    private Object visitBranchingNode(BranchingNode branchingNode) {
+    private static Object visitBranchingNode(BranchingNode branchingNode) {
         Object booleanExpression = visit(branchingNode.getBooleanExpression());
         if (booleanExpression instanceof Boolean booleanExp) {
             if (booleanExp.getValue()) {
@@ -93,7 +119,7 @@ public class Interpreter {
         throw new RuntimeException("BAD BOOLEAN EXPRESSION IN IF STATEMENT");
     }
 
-    private Object visitUnaryOperator(UnaryOperatorNode node) {
+    private static Object visitUnaryOperator(UnaryOperatorNode node) {
         var value = visit(node.getValue());
         return switch(node.getOperator()) {
             case PLUS ->  value;
@@ -143,7 +169,7 @@ public class Interpreter {
         };
     }
 
-    private Object visitUnaryNode(Node node, java.lang.Integer multiplier) {
+    private static Object visitUnaryNode(Node node, java.lang.Integer multiplier) {
         return switch(node) {
             case DoubleNode doubleNode -> new Double(multiplier*doubleNode.getValue());
             case IntegerNode integerNode -> new Integer(multiplier*integerNode.getValue());
@@ -153,7 +179,7 @@ public class Interpreter {
         };
     }
 
-    private Object visitVariableAssignmentNode(VariableAssignmentNode variableAssignmentNode) {
+    private static Object visitVariableAssignmentNode(VariableAssignmentNode variableAssignmentNode) {
         var value = visit(variableAssignmentNode.getExpression());
         var varClass = variableAssignmentNode.getDataType();
         if (varClass.isInstance(value)) {
@@ -170,7 +196,7 @@ public class Interpreter {
         ));
     }
 
-    private Object visitVariableReassignmentNode(VariableReassignmentNode variableReassignmentNode) {
+    private static Object visitVariableReassignmentNode(VariableReassignmentNode variableReassignmentNode) {
         if (!SymbolTable.exists(variableReassignmentNode.getVariableName())) {
             throw new RuntimeException("Identifier '%s' does not exist".formatted(variableReassignmentNode.getVariableName()));
         }
@@ -186,7 +212,7 @@ public class Interpreter {
         ));
     }
 
-    private Object visitBinary(BinaryOperatorNode operatorNode) {
+    private static Object visitBinary(BinaryOperatorNode operatorNode) {
         var operator = operatorNode.getOperatorType().getInstructionType();
         return switch (operator) {
             case OPERATOR_ADDITIVE,
@@ -197,7 +223,7 @@ public class Interpreter {
         };
     }
 
-    private Object visitLogicalOperator(BinaryOperatorNode operatorNode) {
+    private static Object visitLogicalOperator(BinaryOperatorNode operatorNode) {
         var operator = operatorNode.getOperatorType();
         try {
             Boolean left = (Boolean) visit(operatorNode.getLeftNode());
@@ -213,7 +239,7 @@ public class Interpreter {
         }
     }
 
-    private Object visitComparisonOperator(BinaryOperatorNode operatorNode) {
+    private static Object visitComparisonOperator(BinaryOperatorNode operatorNode) {
         var operator = operatorNode.getOperatorType();
         var left = visit(operatorNode.getLeftNode());
         var right = visit(operatorNode.getRightNode());
@@ -234,7 +260,7 @@ public class Interpreter {
 
     }
 
-    private Object visitBinaryOperator(BinaryOperatorNode operatorNode) {
+    private static Object visitBinaryOperator(BinaryOperatorNode operatorNode) {
         var left = visit(operatorNode.getLeftNode());
         var right = visit(operatorNode.getRightNode());
 
@@ -254,14 +280,14 @@ public class Interpreter {
         };
     }
 
-    private <T extends Number<T, U>, U> Number promoteNumber(Number value, Class<T> clazz) {
+    private static <T extends Number<T, U>, U> Number promoteNumber(Number value, Class<T> clazz) {
         if (value instanceof Integer integer && clazz.equals(Double.class)) {
             return new Double(integer.getValue());
         }
         return value;
     }
 
-    private Object visitStringNode(String left, BinaryOperatorNode binaryOperatorNode) {
+    private static Object visitStringNode(String left, BinaryOperatorNode binaryOperatorNode) {
         var rightUntyped = visit(binaryOperatorNode.getRightNode());
         if (binaryOperatorNode.getOperatorType().equals(Instruction.PLUS)) {
             return left.add(rightUntyped);
@@ -270,9 +296,9 @@ public class Interpreter {
         }
     }
 
-    private <T extends Number<T, U>, U> Number<T, U> visitNumberNode(T left, T right,
-                                                                     BinaryOperatorNode binaryOperatorNode,
-                                                                     Class<T> clazz) {
+    private static <T extends Number<T, U>, U> Number<T, U> visitNumberNode(T left, T right,
+                                                                            BinaryOperatorNode binaryOperatorNode,
+                                                                            Class<T> clazz) {
         return switch(binaryOperatorNode.getOperatorType()) {
             case POWER -> left.pow(right);
             case PLUS -> left.add(right);

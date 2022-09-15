@@ -23,6 +23,7 @@ public enum Instruction {
     POWER("power", "^\\^$", OPERATOR),
     LPAREN("left parenthesis", "^\\($", OPERATOR),
     RPAREN("right parenthesis", "^\\)$", OPERATOR),
+    COMMA("Comma", "^,$", OPERATOR),
     EQUAL("=", "^=$", OPERATOR_ASSIGNMENT),
     PLUS_EQUAL("+=", "^\\+=$", OPERATOR_ASSIGNMENT),
     MINUS_EQUAL("-=", "^-=$", OPERATOR_ASSIGNMENT),
@@ -56,6 +57,7 @@ public enum Instruction {
     FOR("For loop", "^for$",  LOOP),
     WHILE("While loop", "^while$", LOOP),
     SEMICOLON("Semicolon", "^;$", OPERATOR),
+    FUNCTION("Function", "^function$", OTHER),
     IDENTIFIER("identifier", "^[A-Za-z_][a-zA-Z_0-9]*$", OTHER),
     EOL("End of Line", "EOF", OTHER);
 
